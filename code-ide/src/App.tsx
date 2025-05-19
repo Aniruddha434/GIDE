@@ -104,7 +104,6 @@ function App() {
         message={guideMessage} 
         isCelebrating={robotMood === 'celebrating'}
         isSad={robotMood === 'sad'}
-        onGetHelpClick={handleGetHelp} // Pass the handler
         onDismissMessage={handleDismissGuideMessage} // Pass the dismiss handler
       />
       {showAboutMe && <AboutMe onClose={toggleAboutMe} />}

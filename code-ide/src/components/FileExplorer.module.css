@@ -1,0 +1,159 @@
+/* FileExplorer.module.css */
+.fileExplorerContainer {
+  height: 100%;
+  overflow-y: auto;
+  padding-top: 5px;
+  color: var(--color-text-primary); /* Use CSS variable */
+  font-size: 0.9rem;
+  background-color: var(--color-bg-secondary); /* Match IDE panel bg */
+}
+
+.header {
+  font-weight: 600;
+  padding: 5px 10px 10px 10px;
+  color: var(--color-text-secondary); /* Use CSS variable */
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  display: flex; /* Added for aligning title and actions */
+  justify-content: space-between; /* Added for spacing */
+  align-items: center; /* Added for vertical alignment */
+}
+
+.headerActions {
+  display: flex;
+}
+
+.actionButton {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary); /* Use CSS variable */
+  cursor: pointer;
+  padding: 2px 4px;
+  margin-left: 5px;
+  font-size: 1.1rem; /* Slightly larger for icon feel */
+  border-radius: 3px;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.actionButton:hover {
+  background-color: var(--color-bg-tertiary); /* Use CSS variable */
+  color: var(--color-text-primary); /* Use CSS variable */
+}
+
+.treeNodeContainer {
+  /* Container for each node and its children, if any */
+}
+
+.treeNode {
+  display: flex;
+  align-items: center;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative; /* For positioning nodeActions */
+}
+
+.treeNode:hover {
+  background-color: var(--color-bg-tertiary); /* Use CSS variable */
+}
+
+.selectedFolder {
+  background-color: var(--color-accent-secondary); /* Use CSS variable for selection, or a lighter tertiary */
+  color: var(--color-bg-primary); /* Ensure text is readable on accent bg */
+  /* border-left: 2px solid #58a6ff; Optional: Accent border */
+}
+
+.selectedFolder:hover {
+  background-color: var(--color-accent-primary); /* Use CSS variable */
+  color: var(--color-bg-primary);
+}
+
+.nodeActions {
+  display: flex;
+  align-items: center;
+  margin-left: auto; /* Push to the right */
+  visibility: hidden; /* Hidden by default */
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out, visibility 0s linear 0.15s;
+  padding-left: 5px; /* Space between name and actions */
+}
+
+.treeNode:hover .nodeActions {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+.actionButtonInline {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary); /* Use CSS variable */
+  cursor: pointer;
+  padding: 0 3px;
+  font-size: 1rem; /* Adjust as needed */
+  border-radius: 3px;
+  margin-left: 2px; /* Space between inline buttons */
+}
+
+.actionButtonInline:hover {
+  color: var(--color-text-primary); /* Use CSS variable */
+}
+
+/* Style for the delete button */
+.deleteButton {
+  /* background: none; */ /* from actionButtonInline */
+  /* border: none; */ /* from actionButtonInline */
+  /* color: #c9d1d9; */ /* from actionButtonInline, but might want different default */
+  /* cursor: pointer; */ /* from actionButtonInline */
+  /* padding: 0 5px; */ /* can use actionButtonInline padding */
+  /* margin-left: auto; */ /* This is now handled by .nodeActions */
+  /* font-size: 1rem; */ /* from actionButtonInline */
+  /* visibility: hidden; */ /* Handled by .nodeActions */
+  /* opacity: 0.7; */ /* from actionButtonInline */
+  /* transition: opacity 0.15s ease-in-out; */ /* Handled by .nodeActions */
+}
+
+/* .treeNode:hover .deleteButton { */ /* Handled by .nodeActions */
+  /* visibility: visible; */
+/* } */
+
+.deleteButton:hover {
+  /* opacity: 1; */ /* from actionButtonInline:hover */
+  color: #ff6b6b !important; /* Keep specific delete color, or make this a variable too if needed */
+}
+
+.folderNode {
+  /* Specific styles for folder nodes if needed */
+  font-weight: 500;
+}
+
+.fileNode {
+  /* Specific styles for file nodes if needed */
+}
+
+.icon {
+  margin-right: 6px;
+  display: inline-block;
+  width: 16px; /* Ensure icons take up same space */
+  text-align: center;
+}
+
+.openIcon {
+  /* Styles for open folder icon, if different needed */
+}
+
+.closedIcon {
+  /* Styles for closed folder icon, if different needed */
+}
+
+.nodeName {
+  /* Styles for the file/folder name */
+}
+
+.childrenContainer {
+  /* Styles for the container of child nodes */
+} 

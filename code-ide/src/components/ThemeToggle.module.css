@@ -1,0 +1,139 @@
+.toggleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Pushes icons to edges initially */
+  width: 64px; /* w-16 */
+  height: 32px; /* h-8 */
+  padding: 4px; /* p-1 */
+  border-radius: 9999px; /* rounded-full */
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  position: relative; /* For absolute positioning of knob and icons */
+  border: 1px solid; /* Base border */
+}
+
+.toggleContainer.dark {
+  background-color: var(--color-bg-tertiary); /* Darker background for dark mode */
+  border-color: var(--color-border-secondary);
+}
+
+.toggleContainer.light {
+  background-color: var(--color-bg-tertiary); /* Lighter background for light mode */
+  border-color: var(--color-border-secondary);
+}
+
+.iconsWrapper {
+  display: flex;
+  justify-content: space-between; /* Positions Sun to left, Moon to right */
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 4px 6px; /* Padding for icons within the toggle */
+  box-sizing: border-box;
+}
+
+.icon {
+  width: 18px; /* w-4 (lucide default is 24, let's make it a bit smaller) */
+  height: 18px; /* h-4 */
+  transition: opacity 0.3s ease, color 0.3s ease;
+  z-index: 1; /* Icons appear above the knob's colored background if needed, but generally knob covers them */
+}
+
+/* Default state for icons (inactive-like) */
+.sun {
+  color: var(--color-text-secondary);
+  opacity: 0; /* Initially hidden */
+}
+
+.moon {
+  color: var(--color-text-secondary);
+  opacity: 0; /* Initially hidden */
+}
+
+/* Styles for when icons are active based on theme */
+.toggleContainer.dark .sun {
+  color: var(--color-accent-primary); /* Or a specific sun color for dark theme */
+  opacity: 1;
+}
+
+.toggleContainer.light .moon {
+  color: var(--color-accent-primary); /* Or a specific moon color for light theme */
+  opacity: 1;
+}
+
+/* Knob styling - ensure it moves correctly */
+.knob {
+  width: 24px; /* w-6 */
+  height: 24px; /* h-6 */
+  border-radius: 9999px; /* rounded-full */
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  position: absolute;
+  top: 3px; /* (Container height - knob height) / 2 - padding adjustment */
+  left: 3px; /* Define initial left position */
+  z-index: 2; /* Knob should be above the static icons' visual space if they weren't opacity 0 */
+  /* The knob effectively hides the icon it moves over, if icons were just changing color but not opacity */
+}
+
+.toggleContainer.dark .knob {
+  background-color: var(--color-bg-secondary); /* Dark knob for dark mode */
+  transform: translateX(0px); /* Knob is at its initial left: 3px position */
+}
+
+.toggleContainer.light .knob {
+  background-color: var(--color-bg-primary); /* Light knob for light mode */
+  transform: translateX(34px); /* Moves 34px to the right from its initial left: 3px position. (64 - 24 - 3 - 3 = 34) */
+  /* Calculation for translateX in light mode: container_width - knob_width - left_offset */
+  /* Container width 64px, knob 24px. Left offset 3px. So, 64 - 24 - 3 = 37px. If padding is symmetrical, it's (64 - 24 - 3 - 3) = 34px for space to move. */
+  /* Knob is 24px. Container padding 4px each side. Knob itself has left: 3px for dark. */
+  /* So, for light: 64 (total_width) - 4 (right_padding) - 24 (knob_width) = 36px from left edge of container. */
+}
+
+/* Cleanup: Remove old/conflicting icon visibility and positioning rules */
+/* The TSX still passes activeIcon, inactiveIconDark, inactiveIconLight. */
+/* We can remove these from CSS if not used, or ensure they don't conflict. */
+/* For now, the rules above should take precedence for .sun and .moon within .dark/.light */
+
+/* Commenting out potentially conflicting/previous rules */
+/*
+.sun {
+  color: var(--color-text-secondary); 
+}
+
+.moon {
+  color: var(--color-text-secondary); 
+}
+
+.toggleContainer.dark .sun.activeIcon,
+.toggleContainer.light .moon.activeIcon {
+  color: var(--color-text-primary); 
+}
+
+.toggleContainer.dark .moon.inactiveIconLight,
+.toggleContainer.light .sun.inactiveIconDark {
+  opacity: 0.5; 
+}
+
+.toggleContainer.dark .iconsWrapper .sun {
+  color: var(--color-text-primary); 
+}
+.toggleContainer.dark .iconsWrapper .moon {
+   color: var(--color-text-secondary); 
+}
+
+.toggleContainer.light .iconsWrapper .moon {
+  color: var(--color-text-primary); 
+}
+.toggleContainer.light .iconsWrapper .sun {
+  color: var(--color-text-secondary); 
+}
+
+.toggleContainer.dark .sun {
+  transform: translateX(1px); 
+}
+.toggleContainer.light .moon {
+  transform: translateX(33px); 
+}
+*/ 

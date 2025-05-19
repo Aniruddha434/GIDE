@@ -1,0 +1,150 @@
+:root {
+  /* Default Dark Theme Variables */
+  --color-bg-primary: #24292e;
+  --color-bg-secondary: #1f2428;
+  --color-bg-tertiary: #2c313a;
+  --color-text-primary: #c9d1d9;
+  --color-text-secondary: #8b949e;
+  --color-accent-primary: #58a6ff;
+  --color-accent-secondary: #1f6feb;
+  --color-border-primary: #30363d;
+  --color-border-secondary: #444c56;
+
+  --editor-bg: #1e1e1e;
+  --editor-text: #d4d4d4;
+  --terminal-bg: #1c2126;
+  --terminal-text: #c9d1d9;
+
+  /* Character Guide Specific - Dark */
+  --character-guide-bubble-bg: rgba(58, 63, 71, 0.85);
+  --character-guide-bubble-text: #e0e0e0;
+  --character-guide-bubble-border: rgba(255, 255, 255, 0.1);
+  --character-guide-help-bg: rgba(88, 166, 255, 0.7);
+  --character-guide-help-bg-hover: rgba(88, 166, 255, 0.9);
+  --character-guide-help-border: rgba(88, 166, 255, 0.9);
+  --character-guide-help-text: white;
+  --character-guide-dismiss-text: rgba(224, 224, 224, 0.7);
+  --character-guide-dismiss-text-hover: rgba(255, 255, 255, 1);
+  --character-guide-box-shadow: rgba(0,0,0,0.3);
+
+  /* Font */
+  --font-family-sans: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #24292e; /* Dark grayish-blue, like GitHub's dark theme */
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html[data-theme="light"] {
+  /* Light Theme Overrides */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f6f8fa;
+  --color-bg-tertiary: #e1e4e8;
+  --color-text-primary: #24292e;
+  --color-text-secondary: #57606a;
+  --color-accent-primary: #0969da;
+  --color-accent-secondary: #0550ae;
+  --color-border-primary: #d0d7de;
+  --color-border-secondary: #bcc4ce;
+
+  --editor-bg: #ffffff;
+  --editor-text: #24292e;
+  --terminal-bg: #f6f8fa;
+  --terminal-text: #24292e;
+
+  /* Character Guide Specific - Light */
+  --character-guide-bubble-bg: rgba(240, 242, 245, 0.85); 
+  --character-guide-bubble-text: #24292e; 
+  --character-guide-bubble-border: rgba(0, 0, 0, 0.1); 
+  --character-guide-help-bg: rgba(9, 105, 218, 0.7); 
+  --character-guide-help-bg-hover: rgba(9, 105, 218, 0.9);
+  --character-guide-help-border: rgba(9, 105, 218, 0.9);
+  --character-guide-help-text: white; 
+  --character-guide-dismiss-text: rgba(0, 0, 0, 0.5); 
+  --character-guide-dismiss-text-hover: rgba(0, 0, 0, 0.8);
+  --character-guide-box-shadow: rgba(0,0,0,0.15);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg-primary);
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth theme transition */
+}
+
+#root {
+  height: 100vh;
+  width: 100%;
+}
+
+h1 {
+  font-size: 1.5em;
+  font-weight: 600; /* Slightly bolder for headings */
+  line-height: 1.2;
+  color: #58a6ff; /* Robot's blue for headings */
+}
+
+button {
+  border-radius: 6px; /* Slightly more rounded */
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #238636; /* Temporary: GitHub green, will change to blue */
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+button:hover {
+  background-color: #2ea043; /* Temporary: Hover for GitHub green */
+  border-color: #30363d; 
+}
+
+button:focus,
+button:focus-visible {
+  outline: 3px solid rgba(13, 110, 253, 0.3); /* Softer focus outline */
+}
+
+/* Specific button class for robot theme */
+.robot-theme-button {
+  background-color: #1f6feb; /* Robot blue */
+  color: white;
+}
+
+.robot-theme-button:hover {
+  background-color: #388bfd; /* Lighter robot blue for hover */
+  border-color: #58a6ff;
+}
+
+/* Selection color */
+::selection {
+  background-color: #388bfd; /* Robot blue for selection */
+  color: #ffffff;
+}

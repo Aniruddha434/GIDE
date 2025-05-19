@@ -1,0 +1,72 @@
+.tab {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  margin-right: 2px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  background-color: var(--color-bg-secondary); /* Use CSS variable */
+  color: var(--color-text-secondary); /* Use CSS variable - inactive tab text */
+  cursor: pointer;
+  font-size: 13px;
+  user-select: none;
+  border: 1px solid var(--color-border-primary); /* Use CSS variable */
+  border-bottom: none; /* Remove bottom border as it will be part of the panel below */
+  transition: background-color 0.2s ease, color 0.2s ease;
+  max-width: 200px; /* Prevent tabs from becoming too wide */
+}
+
+.tab:hover {
+  background-color: var(--color-bg-tertiary); /* Use CSS variable */
+  color: var(--color-text-primary);
+}
+
+.tab.active {
+  background-color: var(--editor-bg); /* Use editor background for active tab */
+  color: var(--editor-text); /* Use editor text for active tab */
+  border-bottom: 1px solid var(--editor-bg); /* Match editor background to make it look connected */
+  /* position: relative; */
+  /* top: 1px; Slightly raise active tab if needed */
+}
+
+.fileName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 8px;
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary); /* Use CSS variable */
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0 4px;
+  margin-left: auto; /* Push close button to the right if tab text is short */
+  opacity: 0.7;
+  line-height: 1;
+  transition: color 0.15s ease-in-out;
+}
+
+.closeButton:hover {
+  color: var(--color-text-primary); /* Use CSS variable */
+  opacity: 1;
+}
+
+.tab.active .closeButton {
+ color: var(--editor-text); /* Match active tab text color */
+}
+
+.tab.dirty {
+  /* Optional: Slightly change tab style if dirty, e.g., italic font or different background shade */
+  /* For now, we primarily rely on the indicator */
+}
+
+.dirtyIndicator {
+  color: var(--color-accent-primary); /* Use CSS variable */
+  font-size: 1.2em; /* Make the dot a bit larger than text */
+  margin-right: 5px;
+  line-height: 1; /* Helps with vertical alignment */
+  font-weight: bold;
+} 

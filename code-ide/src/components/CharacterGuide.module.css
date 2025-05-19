@@ -1,0 +1,137 @@
+/* CharacterGuide.module.css */
+
+@keyframes robotWiggle {
+  0%, 100% {
+    transform: translateX(0) rotate(0) scaleX(-1);
+  }
+  25% {
+    transform: translateX(-3px) rotate(-2deg) scaleX(-1);
+  }
+  75% {
+    transform: translateX(3px) rotate(2deg) scaleX(-1);
+  }
+}
+
+/* Revised robotSlump for "retracting and head droop" effect */
+@keyframes robotSlump {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1) scaleX(-1);
+    opacity: 1;
+  }
+  50% {
+    /* Robot slumps down, head tilts more, body retracts/shrinks */
+    transform: translateY(8px) rotate(-20deg) scale(0.9) scaleX(-1);
+    opacity: 0.8;
+  }
+  100% {
+    /* Stays in the slumped, retracted position */
+    transform: translateY(8px) rotate(-20deg) scale(0.9) scaleX(-1);
+    opacity: 0.8;
+  }
+}
+
+.guideContainer {
+  position: fixed;
+  bottom: 28px; /* Slightly higher for better spacing */
+  right: 28px;
+  display: flex;
+  align-items: flex-end; /* Align items to the bottom for bubble positioning */
+  gap: 14px; /* Slightly more gap for balance */
+  z-index: 1000;
+  /* Adjust overall width if needed, or let content dictate */
+}
+
+.robotImage {
+  width: 70px; 
+  height: auto; 
+  object-fit: contain;
+  transform: scaleX(-1); /* Robot faces left */
+  transform-origin: center bottom; 
+  order: 2; /* Robot image on the right visually */
+}
+
+.robotDancing {
+  animation: robotWiggle 0.5s ease-in-out 3; 
+}
+
+.robotSad {
+  animation: robotSlump 0.8s ease-out 1 forwards; /* Play once and hold the final state */
+}
+
+.speechBubble {
+  background-color: var(--character-guide-bubble-bg);
+  color: var(--character-guide-bubble-text);
+  padding: 10px 15px;
+  padding-right: 25px; /* Add space for the dismiss button */
+  border-radius: 15px; /* Rounded bubble */
+  position: relative; /* For the tail AND the dismiss button */
+  max-width: 220px; /* Limit bubble width */
+  box-shadow: 0 2px 8px var(--character-guide-box-shadow);
+  order: 1; /* Speech bubble on the left visually */
+  margin-right: 12px; /* Space for the tail */
+  backdrop-filter: blur(5px); /* Optional: adds a blur effect to the background seen through the bubble */
+  -webkit-backdrop-filter: blur(5px); /* For Safari */
+  border: 1px solid var(--character-guide-bubble-border);
+  transform: translateY(-1px);
+}
+
+.speechBubble::after {
+  content: '';
+  position: absolute;
+  top: 50%; /* Middle of the bubble */
+  right: -10px; /* Position tail to the right of the bubble */
+  margin-top: -10px; /* Center tail vertically */
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid var(--character-guide-bubble-bg); /* Tail color matches bubble */
+}
+
+.helpButton {
+  background-color: var(--character-guide-help-bg);
+  border: 1px solid var(--character-guide-help-border);
+  color: var(--character-guide-help-text);
+  padding: 5px 10px; /* Smaller padding */
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 0.8rem; /* Smaller font size */
+  font-weight: 500;
+  margin-top: 8px; 
+  cursor: pointer;
+  border-radius: 6px; /* Slightly less rounded */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.1s ease-in-out;
+  order: 3; 
+}
+
+.helpButton:hover {
+  background-color: var(--character-guide-help-bg-hover); /* Add a hover version */
+  box-shadow: 0 2px 5px var(--character-guide-box-shadow);
+  transform: translateY(-1px);
+}
+
+.helpButton:active {
+  transform: translateY(0px);
+  box-shadow: 0 1px 2px var(--character-guide-box-shadow);
+}
+
+.dismissButton {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  color: var(--character-guide-dismiss-text);
+  font-size: 1.2rem; /* Make the 'x' a bit larger */
+  font-weight: bold;
+  line-height: 1;
+  padding: 2px 4px;
+  cursor: pointer;
+  transition: color 0.15s ease-in-out;
+}
+
+.dismissButton:hover {
+  color: var(--character-guide-dismiss-text-hover);
+}

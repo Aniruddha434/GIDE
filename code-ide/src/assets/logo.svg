@@ -1,0 +1,14 @@
+<svg width="200" height="100" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Stylized </> Icon -->
+  <!-- Less-than symbol (or left part) -->
+  <path d="M60 20 L30 50 L60 80 Z" fill="#58a6ff" /> 
+  <!-- Greater-than symbol (or right part) with a slight offset for a slash effect -->
+  <path d="M140 20 L170 50 L140 80 Z" fill="#1f6feb" />
+  <!-- Slash (approximated by a skewed rectangle or a thick line) -->
+  <polygon points="90,15 110,15 100,85 80,85" fill="#444c56" />
+
+  <!-- Text "SKOOL LAB" -->
+  <text x="50%" y="95" dominant-baseline="alphabetic" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#c9d1d9" font-weight="bold">
+    SKOOL LAB
+  </text>
+</svg> 

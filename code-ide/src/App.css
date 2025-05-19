@@ -1,0 +1,315 @@
+/* Remove redundant #root and body styles if covered by index.css */
+
+@keyframes fadeInBlur {
+  0% {
+    opacity: 0;
+    filter: blur(10px) grayscale(50%);
+    transform: scale(0.98);
+  }
+  70% {
+    opacity: 0.8;
+    filter: blur(2px) grayscale(10%);
+    transform: scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0) grayscale(0%);
+    transform: scale(1);
+  }
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  background-color: var(--color-bg-primary);
+  /* animation: fadeInBlur 1s ease-out forwards; */ /* Removed direct application */
+}
+
+.app-container-play-entry-animation {
+  animation: fadeInBlur 1s ease-out forwards; /* Apply animation through this class */
+}
+
+/* IDE Container */
+.ide-container {
+  display: flex; /* Will arrange header and ide-main-panels vertically */
+  flex-direction: column;
+  height: 100%;
+  max-height: 100vh;
+  overflow: hidden;
+  color: var(--color-text-primary);
+}
+
+/* IDE Header */
+.ide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem; 
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+.logo-title-container {
+  display: flex;
+  align-items: baseline; 
+}
+
+/* .header-logo {
+  height: 45px; 
+  width: auto; 
+} */
+
+.header-title-skool,
+.header-title-lab {
+  font-size: 1.6rem; 
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.header-title-skool {
+  color: var(--color-accent-primary);
+}
+
+.header-title-lab {
+  color: var(--color-text-primary); 
+  font-weight: normal; 
+}
+
+/* If you add separate HTML text for "Skool Lab" later */
+/*
+.header-title-text {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #58a6ff; 
+}
+*/
+
+.ide-header h1 { /* This might be unused now if logo-title is primary */
+  margin: 0;
+  font-size: 1.25rem; 
+  font-weight: 600;
+  color: var(--color-accent-primary);
+}
+
+/* IDE Controls */
+.ide-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.language-selector .select {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.language-selector .select:focus {
+  border-color: var(--color-accent-primary);
+  box-shadow: 0 0 0 3px var(--color-accent-primary-transparent, rgba(88, 166, 255, 0.25)); /* Added a fallback variable concept */
+}
+
+.run-button {
+  background-color: var(--color-accent-secondary);
+  color: var(--color-bg-primary); /* For better contrast on accent bg */
+  border: 1px solid var(--color-accent-secondary);
+  border-radius: 6px;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.run-button:hover {
+  background-color: var(--color-accent-primary);
+  border-color: var(--color-accent-primary);
+}
+
+.run-button:disabled {
+  background-color: var(--color-border-secondary);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border-secondary);
+  cursor: not-allowed;
+}
+
+/* Style for the new About button */
+.about-button {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.about-button:hover {
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-accent-primary);
+  color: var(--color-text-primary);
+}
+
+/* Styles for react-resizable-panels integration */
+.ide-body-panels, /* New class for the main horizontal panel group */
+.ide-main-panels { /* Existing class for the vertical panel group */
+  flex-grow: 1; 
+  min-height: 0; 
+  min-width: 0; /* Important for horizontal panels */
+}
+
+.file-explorer-panel {
+  /* Styles for the file explorer panel itself, if any beyond panel defaults */
+  /* For now, content will be styled by FileExplorer component */
+  background-color: var(--color-bg-secondary);
+  /* Ensure it can shrink and not cause overflow if content is too wide */
+  overflow: hidden;
+}
+
+.editor-panel-content,
+.output-panel-content {
+  height: 100%;
+  width: 100%;
+  display: flex; 
+  flex-direction: column;
+  overflow: hidden; 
+}
+
+/* The old .editor-container and .output-container might not be needed, */
+/* or their styles might need to be merged/adjusted into the panel content classes */
+.editor-container {
+  /* flex: 1; /* Remove, panel handles sizing */
+  /* overflow: hidden; /* Handled by panel-content */
+  /* border-bottom: 1px solid #30363d; /* Remove, resize handle is the separator */
+  height: 100%; /* Ensure it tries to fill parent if used */
+  width: 100%;
+}
+
+.output-container {
+  /* height: 25vh; /* Remove, panel handles sizing */
+  /* overflow: hidden; /* Handled by panel-content */
+  /* background-color: #1c2126; /* Should be on panel-content or panel itself */
+  /* display: flex; /* Handled by panel-content */
+  /* flex-direction: column; /* Handled by panel-content */
+  height: 100%; /* Ensure it tries to fill parent if used */
+  width: 100%;
+}
+
+.resize-handle-vertical {
+  height: 8px; 
+  background-color: var(--color-border-primary); 
+  cursor: ns-resize; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.resize-handle-vertical:hover {
+  background-color: var(--color-accent-primary); 
+}
+
+.resize-handle-vertical::before {
+  content: "";
+  width: 40px;
+  height: 2px;
+  background-color: var(--color-border-secondary); 
+  border-radius: 1px;
+}
+
+.resize-handle-horizontal {
+  width: 8px; /* Width of the draggable area for vertical handles */
+  background-color: var(--color-border-primary); /* Color of the handle */
+  cursor: ew-resize; /* East-West resize cursor */
+  display: flex;
+  flex-direction: column; /* Stack grip lines vertically */
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.resize-handle-horizontal:hover {
+  background-color: var(--color-accent-primary); /* Highlight on hover */
+}
+
+/* Simple visual indicator for the horizontal handle */
+.resize-handle-horizontal::before {
+  content: "";
+  height: 40px; /* Length of the grip lines */
+  width: 2px;
+  background-color: var(--color-border-secondary); /* Color of the grip lines */
+  border-radius: 1px;
+}
+
+/* Terminal */
+.terminal-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--terminal-bg); /* Ensure this matches output-container */
+}
+
+.terminal-header {
+  background-color: var(--color-bg-primary); /* Match main background or slightly different shade */
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary); /* Lighter text for terminal header */
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+.terminal-body {
+  background-color: var(--terminal-bg);
+  color: var(--terminal-text); /* Terminal text color */
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem;
+  font-family: var(--font-family-mono);
+  font-size: 13px; /* Common terminal font size */
+  line-height: 1.5;
+}
+
+.terminal-body pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.terminal-placeholder {
+  color: var(--color-text-secondary); /* Softer placeholder text */
+  font-style: italic;
+}
+
+/* Scrollbar styling for webkit browsers */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary); /* Scrollbar track to match background */
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-secondary); /* Scrollbar thumb color */
+  border-radius: 6px;
+  border: 3px solid var(--color-bg-primary); /* Creates padding around thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-primary); /* Robot blue on hover */
+}

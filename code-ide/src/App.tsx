@@ -66,12 +66,6 @@ function App() {
     return () => clearTimeout(timer);
   }, [robotMood]);
 
-  const handleGetHelp = () => {
-    // If there's an error, we'll pass this info implicitly via robotMood being 'sad'
-    // Otherwise, it's a general explanation request.
-    updateGuide("Let me think about that...", 'normal'); // Robot thinking message
-  };
-
   const handleDismissGuideMessage = () => {
     setGuideMessage(undefined);
     // Optionally, reset mood if a message is dismissed, or let timers handle it

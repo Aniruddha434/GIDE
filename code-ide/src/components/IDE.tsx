@@ -118,7 +118,7 @@ export interface OpenFile {
   isDirty?: boolean;
 }
 
-const WEBSOCKET_URL = 'ws://localhost:5000';
+const WEBSOCKET_URL = 'ws://13.231.241.132:5000';
 
 const IDE: React.FC<IDEPropsWithAsk> = ({ 
   setGuideAppearance, 
@@ -166,7 +166,7 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
             hintType,
             errorOutput: hasError ? output.join('\n') : undefined,
           };
-          const response = await fetch('http://localhost:5000/api/get-gemini-hint', {
+          const response = await fetch('http://13.231.241.132:5000/api/get-gemini-hint', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -707,7 +707,7 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
                     fontSize: 14,
                   }}
                 />
-              </div>
+      </div>
             </Panel>
           </PanelGroup>
         </Panel>

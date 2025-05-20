@@ -49,14 +49,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1.5rem; 
+  padding: 0.75rem 1.5rem;
   background-color: var(--color-bg-secondary);
   border-bottom: 1px solid var(--color-border-primary);
 }
 
 .logo-title-container {
   display: flex;
-  align-items: baseline; 
+  align-items: baseline;
 }
 
 /* .header-logo {
@@ -66,7 +66,7 @@
 
 .header-title-skool,
 .header-title-lab {
-  font-size: 1.6rem; 
+  font-size: 1.6rem;
   font-weight: bold;
   letter-spacing: 0.5px;
 }
@@ -76,8 +76,8 @@
 }
 
 .header-title-lab {
-  color: var(--color-text-primary); 
-  font-weight: normal; 
+  color: var(--color-text-primary);
+  font-weight: normal;
 }
 
 /* If you add separate HTML text for "Skool Lab" later */
@@ -89,9 +89,10 @@
 }
 */
 
-.ide-header h1 { /* This might be unused now if logo-title is primary */
+.ide-header h1 {
+  /* This might be unused now if logo-title is primary */
   margin: 0;
-  font-size: 1.25rem; 
+  font-size: 1.25rem;
   font-weight: 600;
   color: var(--color-accent-primary);
 }
@@ -117,7 +118,8 @@
 
 .language-selector .select:focus {
   border-color: var(--color-accent-primary);
-  box-shadow: 0 0 0 3px var(--color-accent-primary-transparent, rgba(88, 166, 255, 0.25)); /* Added a fallback variable concept */
+  box-shadow: 0 0 0 3px
+    var(--color-accent-primary-transparent, rgba(88, 166, 255, 0.25)); /* Added a fallback variable concept */
 }
 
 .run-button {
@@ -165,9 +167,10 @@
 
 /* Styles for react-resizable-panels integration */
 .ide-body-panels, /* New class for the main horizontal panel group */
-.ide-main-panels { /* Existing class for the vertical panel group */
-  flex-grow: 1; 
-  min-height: 0; 
+.ide-main-panels {
+  /* Existing class for the vertical panel group */
+  flex-grow: 1;
+  min-height: 0;
   min-width: 0; /* Important for horizontal panels */
 }
 
@@ -183,9 +186,9 @@
 .output-panel-content {
   height: 100%;
   width: 100%;
-  display: flex; 
+  display: flex;
   flex-direction: column;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 /* The old .editor-container and .output-container might not be needed, */
@@ -209,9 +212,9 @@
 }
 
 .resize-handle-vertical {
-  height: 8px; 
-  background-color: var(--color-border-primary); 
-  cursor: ns-resize; 
+  height: 8px;
+  background-color: var(--color-border-primary);
+  cursor: ns-resize;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -219,14 +222,14 @@
 }
 
 .resize-handle-vertical:hover {
-  background-color: var(--color-accent-primary); 
+  background-color: var(--color-accent-primary);
 }
 
 .resize-handle-vertical::before {
   content: "";
   width: 40px;
   height: 2px;
-  background-color: var(--color-border-secondary); 
+  background-color: var(--color-border-secondary);
   border-radius: 1px;
 }
 
@@ -259,11 +262,15 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: var(--terminal-bg); /* Ensure this matches output-container */
+  background-color: var(
+    --terminal-bg
+  ); /* Ensure this matches output-container */
 }
 
 .terminal-header {
-  background-color: var(--color-bg-primary); /* Match main background or slightly different shade */
+  background-color: var(
+    --color-bg-primary
+  ); /* Match main background or slightly different shade */
   padding: 0.5rem 1rem;
   display: flex;
   align-items: center;

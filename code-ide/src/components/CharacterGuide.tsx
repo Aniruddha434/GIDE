@@ -10,7 +10,12 @@ interface CharacterGuideProps {
   onDismissMessage?: () => void; // New prop to handle message dismissal
 }
 
-const CharacterGuide: React.FC<CharacterGuideProps> = ({ message, isCelebrating, isSad, onDismissMessage }) => {
+const CharacterGuide: React.FC<CharacterGuideProps> = ({ 
+  message, 
+  isCelebrating, 
+  isSad, 
+  onDismissMessage 
+}) => {
   let robotStateClass = styles.robotImage;
   if (isCelebrating) {
     robotStateClass = `${styles.robotImage} ${styles.robotDancing}`;
@@ -27,20 +32,19 @@ const CharacterGuide: React.FC<CharacterGuideProps> = ({ message, isCelebrating,
   return (
     <div className={styles.guideContainer}> {/* Use a class for the main container */}
       {/* Message Bubble: Order can be changed with CSS for visual appearance */}
-      {currentMessage && (
-        <div className={styles.speechBubble}>
-          <p style={{ margin: 0 }}>{currentMessage}</p>
-          {onDismissMessage && (
-            <button 
-              onClick={onDismissMessage} 
-              className={styles.dismissButton}
-              title="Dismiss message"
-            >
-              &times; {/* This is the 'x' character */}
-            </button>
-          )}
-        </div>
-      )}
+      <div className={styles.speechBubble}>
+        <p>{currentMessage}</p>
+        {onDismissMessage && (
+          <button 
+            onClick={onDismissMessage} 
+            className={styles.dismissButton}
+            title="Dismiss message"
+            aria-label="Dismiss message"
+          >
+            ×
+          </button>
+        )}
+      </div>
       <img 
         src={RobotImagePath} 
         alt="Character Guide" 

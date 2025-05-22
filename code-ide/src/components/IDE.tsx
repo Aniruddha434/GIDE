@@ -15,6 +15,7 @@ import type { FileSystemNode } from './FileExplorer';
 import type { RobotMood, Theme } from '../App';
 import useWebSocket, { type WebSocketMessage } from '../hooks/useWebSocket';
 import { ThemeToggle } from './ThemeToggle';
+import CreativeTools from './CreativeTools';
 
 // Define props interface for IDE
 interface IDEProps {
@@ -148,6 +149,8 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
   const outputEndRef = useRef<HTMLDivElement>(null);
 
   const editorTheme = currentTheme === 'light' ? 'vs' : 'vs-dark';
+
+  const [showCreativeTools, setShowCreativeTools] = useState(false);
 
   useEffect(() => {
     outputEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -515,6 +518,23 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
     }
   };
 
+  // Add handler for template selection
+  const handleTemplateSelect = (templateCode: string) => {
+    const newId = uuidv4();
+    const newFileName = `creative_${newId}.py`;
+    const newFile: OpenFile = {
+      id: newId,
+      name: newFileName,
+      language: 'python',
+      content: templateCode,
+      isDirty: true
+    };
+    setOpenFiles(prev => [...prev, newFile]);
+    setActiveFileId(newId);
+    setShowCreativeTools(false);
+    setGuideAppearance("Template loaded! You can now modify and run it.", 'normal');
+  };
+
   return (
     <div className="ide-container">
       <div className="ide-header">
@@ -530,21 +550,28 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
             onClick={handleRunCode} 
             disabled={loading || !code.trim() || !isConnected} 
           >
-            {loading ? 'Running...' : (isConnected ? 'Run' : 'Connect')}
+            {loading ? 'Running...' : (isConnected ? '▶️ Run Code' : 'Connect')}
+          </button>
+          <button 
+            className="about-button"
+            onClick={() => setShowCreativeTools(!showCreativeTools)}
+            title="Open Creative Tools"
+          >
+            🎨 Creative
           </button>
           <button 
             className="about-button"
             onClick={onToggleAboutMe} 
             title="About Aniruddha Gayki"
           >
-            👨‍💻 About
+            About
           </button>
           <button 
             className="about-button"
             onClick={onAskAiHint}
             title="Ask Anny for a code hint"
           >
-            🤖 Ask Anny
+            Ask Anny
           </button>
           {onToggleGuide && (
             <button onClick={onToggleGuide} className="about-button" title="Open Guide">
@@ -555,6 +582,9 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
         </div>
       </div>
       
+      {showCreativeTools ? (
+        <CreativeTools onSelectTemplate={handleTemplateSelect} />
+      ) : (
       <PanelGroup direction="horizontal" className="ide-body-panels">
         <Panel defaultSize={20} minSize={15} className="file-explorer-panel">
           <FileExplorer 
@@ -712,6 +742,7 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
           </PanelGroup>
         </Panel>
       </PanelGroup>
+      )}
     </div>
   );
 };

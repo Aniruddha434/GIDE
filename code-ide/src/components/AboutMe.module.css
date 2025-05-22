@@ -9,72 +9,23 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000; /* Ensure it's above other content like CharacterGuide */
+  z-index: 2000;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 .modalContent {
-  background-color: #2c313a; /* Dark background for the modal */
-  color: #c9d1d9; /* Light text */
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
   padding: 25px 30px;
-  border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
   width: 90%;
-  max-width: 600px;
-  max-height: 80vh;
+  max-width: 700px;
+  max-height: 85vh;
   overflow-y: auto;
   position: relative;
-  line-height: 1.6;
-}
-
-.modalContent h2 {
-  color: #58a6ff; /* Robot blue for heading */
-  margin-top: 0;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-}
-
-.modalContent h2 span[role="img"] {
-  margin-right: 10px;
-  font-size: 1.5em;
-}
-
-.modalContent h3 {
-  color: #8b949e; /* Lighter gray for subheadings */
-  margin-top: 20px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #444c56;
-  padding-bottom: 5px;
-}
-
-.modalContent ul {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-.modalContent li {
-  margin-bottom: 10px;
-  padding-left: 20px;
-  position: relative;
-}
-
-.modalContent li::before {
-  content: '✨'; /* Or use a different bullet character */
-  position: absolute;
-  left: 0;
-  color: #58a6ff;
-}
-
-.modalContent p {
-  margin-bottom: 15px;
-}
-
-.modalContent strong {
-  color: #a3bfcc; /* Slightly brighter for emphasis */
-}
-
-.modalContent span[role="img"] {
-  margin: 0 2px;
+  border: 1px solid var(--color-border-primary);
 }
 
 .closeButton {
@@ -83,87 +34,134 @@
   right: 15px;
   background: none;
   border: none;
-  color: #8b949e;
-  font-size: 1.8rem;
-  font-weight: bold;
+  color: var(--color-text-secondary);
   cursor: pointer;
-  transition: color 0.2s ease-in-out;
+  padding: 5px;
+  line-height: 1;
+  border-radius: 50%;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .closeButton:hover {
-  color: #c9d1d9;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-tertiary);
 }
 
-.linkedinLink {
-  color: #58a6ff;
-  text-decoration: none;
-  font-weight: bold;
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 12px;
-  border: 1px solid #58a6ff;
-  border-radius: 5px;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+.modalContent h2 {
+  color: var(--color-accent-primary);
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  text-align: center;
 }
 
-.linkedinLink span[role="img"] {
-  margin-right: 8px;
+.modalContent p, .modalContent ul {
+  margin-bottom: 15px;
+  line-height: 1.7;
+  font-size: 0.95rem;
 }
 
-.linkedinLink:hover {
-  background-color: #58a6ff;
-  color: #fff;
+.modalContent ul {
+  list-style-type: disc;
+  padding-left: 25px;
+}
+
+.modalContent li {
+  margin-bottom: 8px;
+}
+
+.modalContent strong {
+  color: var(--color-accent-secondary);
+  font-weight: 600;
+}
+
+.section {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+.section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 20px;
+}
+
+.section h3 {
+  color: var(--color-text-primary);
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.techList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin: 15px 0;
+}
+
+.techList > div {
+  background: var(--color-bg-tertiary);
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border-primary);
 }
 
 .contactInfo {
   margin-top: 20px;
-  margin-bottom: 20px;
-  padding: 10px 0;
-  border-top: 1px solid #444c56;
-  border-bottom: 1px solid #444c56;
+  padding: 15px;
+  background: var(--color-bg-tertiary);
+  border-radius: 8px;
+  border: 1px solid var(--color-border-primary);
 }
 
 .contactInfo p {
-  margin-bottom: 8px;
+  margin: 8px 0;
   display: flex;
   align-items: center;
-}
-
-.contactInfo span[role="img"] {
-  margin-right: 10px;
-  font-size: 1.1em;
+  gap: 8px;
 }
 
 .contactInfo a {
-  color: #a3bfcc; /* Slightly lighter text color for links */
+  color: var(--color-accent-primary);
   text-decoration: none;
-  transition: color 0.2s ease-in-out;
 }
 
 .contactInfo a:hover {
-  color: #58a6ff; /* Robot blue on hover */
   text-decoration: underline;
 }
 
-.techList {
-  list-style-type: none;
-  padding-left: 0;
-  margin-bottom: 15px;
+.linkedinLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 15px;
+  padding: 8px 15px;
+  background: var(--color-bg-tertiary);
+  border-radius: 6px;
+  border: 1px solid var(--color-border-primary);
+  transition: background-color 0.2s;
 }
 
-.techList li {
-  margin-bottom: 8px;
-  padding-left: 20px;
-  position: relative;
+.linkedinLink:hover {
+  background: var(--color-bg-secondary);
 }
 
-.techList li::before {
-  content: '💻'; /* Tech-related emoji */
-  position: absolute;
-  left: 0;
-  color: #58a6ff; /* Or use a different color if desired */
+/* Scrollbar for modal content */
+.modalContent::-webkit-scrollbar {
+  width: 10px;
 }
 
-.techList li strong {
-  color: #8b949e; /* Slightly differentiate the category title */
+.modalContent::-webkit-scrollbar-track {
+  background: var(--color-bg-tertiary);
+  border-radius: 10px;
+}
+
+.modalContent::-webkit-scrollbar-thumb {
+  background: var(--color-border-secondary);
+  border-radius: 10px;
+}
+
+.modalContent::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-primary);
 } 

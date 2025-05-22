@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import IDE from './components/IDE';
 import CharacterGuide from './components/CharacterGuide';
 import AboutMe from './components/AboutMe';
 import GuideModal from './components/GuideModal';
+import SplashScreen from './components/SplashScreen';
 
 export type RobotMood = 'normal' | 'celebrating' | 'sad';
 export type Theme = 'light' | 'dark';
 
-function App() {
+const App: React.FC = () => {
   // State for the character guide's message
   const [guideMessage, setGuideMessage] = useState<string | undefined>(
     "Welcome to the Code IDE! I'm here to help you get started."
@@ -19,6 +20,7 @@ function App() {
   const [showGuideModal, setShowGuideModal] = useState<boolean>(false);
   const [theme, setTheme] = useState<Theme>('dark');
   const [appContainerClasses, setAppContainerClasses] = useState<string>('app-container');
+  const [showSplash, setShowSplash] = useState(true);
 
   // Effect for entry animation
   useEffect(() => {
@@ -68,8 +70,6 @@ function App() {
 
   const handleDismissGuideMessage = () => {
     setGuideMessage(undefined);
-    // Optionally, reset mood if a message is dismissed, or let timers handle it
-    // setRobotMood('normal'); 
   };
 
   const toggleAboutMe = () => {
@@ -80,9 +80,16 @@ function App() {
     setShowGuideModal(!showGuideModal);
   };
 
+  const handleSplashComplete = () => {
+    setShowSplash(false);
+  };
+
   return (
+    <div className="app">
+      {showSplash && (
+        <SplashScreen onClose={() => setShowSplash(false)} />
+      )}
     <div className={appContainerClasses}>
-      {/* Pass the message update function to the IDE component */}
       <IDE 
         setGuideAppearance={updateGuide} 
         getAiHint={triggerAiHint} 
@@ -93,17 +100,17 @@ function App() {
         onToggleTheme={toggleTheme}
         onAskAiHint={handleAskAiHint}
       />
-      {/* Pass the current message to the CharacterGuide component */}
       <CharacterGuide 
         message={guideMessage} 
         isCelebrating={robotMood === 'celebrating'}
         isSad={robotMood === 'sad'}
-        onDismissMessage={handleDismissGuideMessage} // Pass the dismiss handler
+          onDismissMessage={handleDismissGuideMessage}
       />
       {showAboutMe && <AboutMe onClose={toggleAboutMe} />}
       {showGuideModal && <GuideModal onClose={toggleGuideModal} />}
+      </div>
     </div>
   );
-}
+};
 
 export default App;

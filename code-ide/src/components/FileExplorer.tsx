@@ -75,6 +75,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
 
   const indent = level * 15; // Indentation for nesting
   const isSelected = node.type === 'folder' && node.id === selectedFolderId;
+  const fileType = node.type === 'file' ? node.name.split('.').pop()?.toLowerCase() : undefined;
 
   return (
     <div className={styles.treeNodeContainer}>
@@ -82,6 +83,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         className={`${styles.treeNode} ${node.type === 'folder' ? styles.folderNode : styles.fileNode} ${isSelected ? styles.selectedFolder : ''}`}
         style={{ paddingLeft: `${indent}px` }}
         onClick={handleNodeClick}
+        data-file-type={fileType}
       >
         {node.type === 'folder' && (
           <span className={`${styles.icon} ${isOpen ? styles.openIcon : styles.closedIcon}`} onClick={(e) => { e.stopPropagation(); handleToggle();}} >
@@ -89,7 +91,14 @@ const TreeNode: React.FC<TreeNodeProps> = ({
           </span>
         )}
         {node.type === 'file' && (
-          <span className={styles.icon}>📄</span> /* Simple file icon */
+          <span className={styles.icon}>
+            {fileType === 'py' ? '🐍' :
+             fileType === 'js' ? '📜' :
+             fileType === 'html' ? '🌐' :
+             fileType === 'css' ? '🎨' :
+             fileType === 'json' ? '📋' :
+             fileType === 'md' ? '📝' : '📄'}
+          </span>
         )}
         <span className={styles.nodeName}>{node.name}</span>
         <div className={styles.nodeActions}>
@@ -99,8 +108,12 @@ const TreeNode: React.FC<TreeNodeProps> = ({
               <button onClick={handleCreateSubfolderHere} title="New Subfolder" className={styles.actionButtonInline}>📁+</button>
             </>
           )}
-          <button onClick={handleDelete} className={`${styles.deleteButton} ${styles.actionButtonInline}`} title={`Delete ${node.name}`}>
-            🗑️
+          <button
+            className={styles.actionButtonInline}
+            onClick={handleDelete}
+            title="Delete"
+          >
+            ×
           </button>
         </div>
       </div>

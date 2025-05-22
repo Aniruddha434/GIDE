@@ -4,6 +4,7 @@
   --color-bg-secondary: #1f2428;
   --color-bg-tertiary: #2c313a;
   --color-text-primary: #c9d1d9;
+  --color-text-primary-rgb: 201, 209, 217;
   --color-text-secondary: #8b949e;
   --color-accent-primary: #58a6ff;
   --color-accent-secondary: #1f6feb;
@@ -41,6 +42,23 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* FileExplorer Theme Colors - Default (Dark) */
+  --file-explorer-bg-start: #1a2b3c;
+  --file-explorer-bg-end: #2c3e50;
+  --file-explorer-header-start: #3498db;
+  --file-explorer-header-end: #2980b9;
+  --file-explorer-accent: #f1c40f;
+  --file-explorer-accent-hover: #f39c12;
+  --file-explorer-text: #ecf0f1;
+  --file-explorer-border: #f1c40f;
+  --file-explorer-shadow: rgba(52, 152, 219, 0.2);
+  --file-explorer-folder: #f1c40f;
+  --file-explorer-file: #3498db;
+  --file-explorer-python: #2ecc71;
+  --file-explorer-js: #f1c40f;
+  --file-explorer-html: #e67e22;
+  --file-explorer-css: #3498db;
 }
 
 html[data-theme="light"] {
@@ -49,6 +67,7 @@ html[data-theme="light"] {
   --color-bg-secondary: #f6f8fa;
   --color-bg-tertiary: #e1e4e8;
   --color-text-primary: #24292e;
+  --color-text-primary-rgb: 36, 41, 46;
   --color-text-secondary: #57606a;
   --color-accent-primary: #0969da;
   --color-accent-secondary: #0550ae;
@@ -71,6 +90,23 @@ html[data-theme="light"] {
   --character-guide-dismiss-text: rgba(0, 0, 0, 0.5); 
   --character-guide-dismiss-text-hover: rgba(0, 0, 0, 0.8);
   --character-guide-box-shadow: rgba(0,0,0,0.15);
+
+  /* FileExplorer Theme Colors - Light */
+  --file-explorer-bg-start: #A8E6CF;
+  --file-explorer-bg-end: #DCEDC1;
+  --file-explorer-header-start: #3EC1D3;
+  --file-explorer-header-end: #4ECDC4;
+  --file-explorer-accent: #FFD93D;
+  --file-explorer-accent-hover: #FFE66D;
+  --file-explorer-text: #3EC1D3;
+  --file-explorer-border: #FFD93D;
+  --file-explorer-shadow: rgba(62, 193, 211, 0.2);
+  --file-explorer-folder: #FFD93D;
+  --file-explorer-file: #3EC1D3;
+  --file-explorer-python: #4ECDC4;
+  --file-explorer-js: #FFD93D;
+  --file-explorer-html: #A8E6CF;
+  --file-explorer-css: #3EC1D3;
 }
 
 * {

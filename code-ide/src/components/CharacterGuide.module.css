@@ -30,15 +30,34 @@
   }
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink {
+  50% { border-color: transparent }
+}
+
 .guideContainer {
   position: fixed;
-  bottom: 28px; /* Slightly higher for better spacing */
+  bottom: 28px;
   right: 28px;
   display: flex;
-  align-items: flex-end; /* Align items to the bottom for bubble positioning */
-  gap: 14px; /* Slightly more gap for balance */
+  align-items: flex-end;
+  gap: 14px;
   z-index: 1000;
-  /* Adjust overall width if needed, or let content dictate */
 }
 
 .robotImage {
@@ -59,37 +78,46 @@
 }
 
 .speechBubble {
-  background-color: var(--character-guide-bubble-bg);
-  color: var(--character-guide-bubble-text);
-  padding: 10px 15px;
-  padding-right: 25px; /* Add space for the dismiss button */
-  border-radius: 15px; /* Rounded bubble */
-  position: relative; /* For the tail AND the dismiss button */
-  max-width: 220px; /* Limit bubble width */
-  box-shadow: 0 2px 8px var(--character-guide-box-shadow);
-  order: 1; /* Speech bubble on the left visually */
-  margin-right: 12px; /* Space for the tail */
-  backdrop-filter: blur(5px); /* Optional: adds a blur effect to the background seen through the bubble */
-  -webkit-backdrop-filter: blur(5px); /* For Safari */
-  border: 1px solid var(--character-guide-bubble-border);
+  background: transparent;
+  color: var(--color-text-primary); /* Changed from #E8E8E8 to use theme variable */
+  padding: 16px 20px;
+  padding-right: 35px;
+  border-radius: 18px;
+  position: relative;
+  max-width: 280px;
+  min-width: 120px;
+  box-shadow: none;
+  order: 1;
+  margin-right: 12px;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
   transform: translateY(-1px);
   overflow-wrap: break-word;
   white-space: pre-wrap;
-  max-height: 150px; /* Adjust as needed */
+  max-height: 200px;
   overflow-y: auto;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  text-shadow: 0 0 15px rgba(var(--color-text-primary-rgb, 0, 0, 0), 0.5); /* Updated text shadow */
+}
+
+.speechBubble p {
+  margin: 0;
+  position: relative;
+  display: block;
+  width: 100%;
+  color: var(--color-text-primary); /* Changed from #E8E8E8 to use theme variable */
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  background: transparent;
 }
 
 .speechBubble::after {
-  content: '';
-  position: absolute;
-  top: 50%; /* Middle of the bubble */
-  right: -10px; /* Position tail to the right of the bubble */
-  margin-top: -10px; /* Center tail vertically */
-  width: 0;
-  height: 0;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 10px solid var(--character-guide-bubble-bg); /* Tail color matches bubble */
+  display: none; /* Remove the speech bubble tail */
 }
 
 .helpButton {
@@ -123,19 +151,65 @@
 
 .dismissButton {
   position: absolute;
-  top: 5px;
-  right: 5px;
-  background: none;
+  top: 8px;
+  right: 8px;
+  background: transparent;
   border: none;
-  color: var(--character-guide-dismiss-text);
-  font-size: 1.2rem; /* Make the 'x' a bit larger */
-  font-weight: bold;
-  line-height: 1;
-  padding: 2px 4px;
+  color: var(--color-text-primary); /* Changed from #E8E8E8 to use theme variable */
+  opacity: 0.6;
+  font-size: 1.2rem;
   cursor: pointer;
-  transition: color 0.15s ease-in-out;
+  padding: 4px;
+  line-height: 1;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  text-shadow: 0 0 15px rgba(var(--color-text-primary-rgb, 0, 0, 0), 0.5); /* Updated text shadow */
 }
 
 .dismissButton:hover {
-  color: var(--character-guide-dismiss-text-hover);
+  opacity: 1;
+  background: transparent; /* Keep transparent on hover */
+  transform: scale(1.1);
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.8); /* Brighter glow on hover */
+}
+
+.dismissButton:active {
+  transform: scale(0.95);
+}
+
+/* Custom scrollbar for the speech bubble */
+.speechBubble::-webkit-scrollbar {
+  width: 6px;
+}
+
+.speechBubble::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.speechBubble::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.speechBubble::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Typing animation for new messages */
+.speechBubble.typing p {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 1s steps(40, end);
+}
+
+.speechBubble.typing p::after {
+  content: '|';
+  animation: blink 0.7s infinite;
+  font-weight: bold;
+  margin-left: 2px;
 }

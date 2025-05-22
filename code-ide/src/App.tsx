@@ -87,7 +87,7 @@ const App: React.FC = () => {
   return (
     <div className="app">
       {showSplash && (
-        <SplashScreen onClose={() => setShowSplash(false)} />
+        <SplashScreen onClose={handleSplashComplete} />
       )}
     <div className={appContainerClasses}>
       <IDE 

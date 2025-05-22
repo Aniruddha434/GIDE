@@ -16,6 +16,8 @@ import type { RobotMood, Theme } from '../App';
 import useWebSocket, { type WebSocketMessage } from '../hooks/useWebSocket';
 import { ThemeToggle } from './ThemeToggle';
 import CreativeTools from './CreativeTools';
+import CreateFileModal from './CreateFileModal';
+import CharacterGuide from './CharacterGuide';
 
 // Define props interface for IDE
 interface IDEProps {
@@ -151,6 +153,13 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
   const editorTheme = currentTheme === 'light' ? 'vs' : 'vs-dark';
 
   const [showCreativeTools, setShowCreativeTools] = useState(false);
+
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [createModalType, setCreateModalType] = useState<'file' | 'folder'>('file');
+  const [createModalParentId, setCreateModalParentId] = useState<string | null>(null);
+
+  const [guideMessage, setGuideMessage] = useState<string | undefined>();
+  const [robotMood, setRobotMood] = useState<'normal' | 'celebrating' | 'sad'>('normal');
 
   useEffect(() => {
     outputEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -409,46 +418,89 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
     setGuideAppearance(`${nodeToDelete.name} deleted.`, 'normal');
   };
 
+  const getInitialContent = (fileName: string, fileLang: string): string => {
+    switch (fileLang) {
+      case 'python':
+        return `#!/usr/bin/env python3
+"""
+File: ${fileName}
+Created: ${new Date().toLocaleDateString()}
+Description: Python script
+"""
+
+def main():
+    print("Hello, World!")
+
+if __name__ == "__main__":
+    main()`;
+      case 'javascript':
+        return `// ${fileName}
+// Created: ${new Date().toLocaleDateString()}
+
+console.log("Hello, World!");`;
+      case 'typescript':
+        return `// ${fileName}
+// Created: ${new Date().toLocaleDateString()}
+
+console.log("Hello, World!");`;
+      case 'html':
+        return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${fileName}</title>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+</body>
+</html>`;
+      case 'css':
+        return `/* ${fileName} */
+/* Created: ${new Date().toLocaleDateString()} */
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}`;
+      case 'markdown':
+        return `# ${fileName}
+
+Created: ${new Date().toLocaleDateString()}
+
+## Description
+
+Write your markdown content here.`;
+      default:
+        return `// ${fileName}
+// Created: ${new Date().toLocaleDateString()}`;
+    }
+  };
+
   const handleCreateNode = (type: 'file' | 'folder', parentId: string | null = null) => {
-    let newNodeName = '';
-    let promptMessage = '';
+    setCreateModalType(type);
+    setCreateModalParentId(parentId);
+    setShowCreateModal(true);
+  };
 
-    if (type === 'file') {
-      promptMessage = 'Enter the name for the new file (e.g., script.py, styles.css):';
-    } else {
-      promptMessage = 'Enter the name for the new folder:';
-    }
-
-    newNodeName = window.prompt(promptMessage) || '';
-    newNodeName = newNodeName.trim();
-
-    if (!newNodeName) {
-      setGuideAppearance('File/Folder creation cancelled.', 'normal');
-      return;
-    }
-
-    if (nameExistsInScope(newNodeName, fileTree, parentId)) {
-      const scopeMessage = parentId ? `in the selected folder` : `at the root level`;
-      setGuideAppearance(`A file or folder named "${newNodeName}" already exists ${scopeMessage}. Please choose a different name.`, 'sad');
-      return;
-    }
-    
+  const handleCreateModalSubmit = (fileName: string) => {
+    const fileLang = getLanguageForFile(fileName);
     const newId = uuidv4();
     let newNode: FileSystemNode;
 
-    if (type === 'file') {
-      const fileLang = getLanguageForFile(newNodeName);
+    if (createModalType === 'file') {
       newNode = {
         id: newId,
-        name: newNodeName,
+        name: fileName,
         type: 'file',
       };
-      setFileTree(prevTree => addNodeToTree(prevTree, newNode, parentId));
+      setFileTree(prevTree => addNodeToTree(prevTree, newNode, createModalParentId));
 
-      const initialContent = `// New file: ${newNodeName}\n`;
+      const initialContent = getInitialContent(fileName, fileLang);
       const newOpenFile: OpenFile = {
         id: newId,
-        name: newNodeName,
+        name: fileName,
         language: fileLang,
         content: initialContent,
         isDirty: true,
@@ -456,17 +508,25 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
       setOpenFiles(prevOpenFiles => [...prevOpenFiles, newOpenFile]);
       setLocalFileContentsDb(prevDb => ({ ...prevDb, [newId]: initialContent }));
       setActiveFileId(newId);
-      setGuideAppearance(`File "${newNodeName}" created and opened! Language set to ${fileLang}.`, 'normal');
-    } else { // type === 'folder'
+      setGuideAppearance(`File "${fileName}" created with ${fileLang} template!`, 'normal');
+    } else {
       newNode = {
         id: newId,
-        name: newNodeName,
+        name: fileName,
         type: 'folder',
         children: [],
       };
-      setFileTree(prevTree => addNodeToTree(prevTree, newNode, parentId));
-      setGuideAppearance(`Folder "${newNodeName}" created!`, 'normal');
+      setFileTree(prevTree => addNodeToTree(prevTree, newNode, createModalParentId));
+      setGuideAppearance(`Folder "${fileName}" created!`, 'normal');
     }
+
+    setShowCreateModal(false);
+  };
+
+  const getExistingNames = (parentId: string | null) => {
+    const parent = parentId ? fileTree.find(node => node.id === parentId) : null;
+    const siblings = parent?.children || fileTree;
+    return siblings.map(node => node.name);
   };
 
   const handleRunCode = () => {
@@ -535,6 +595,11 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
     setGuideAppearance("Template loaded! You can now modify and run it.", 'normal');
   };
 
+  // Add handler for guide message dismissal
+  const handleDismissGuideMessage = () => {
+    setGuideMessage(undefined);
+  };
+
   return (
     <div className="ide-container">
       <div className="ide-header">
@@ -555,9 +620,9 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
           <button 
             className="about-button"
             onClick={() => setShowCreativeTools(!showCreativeTools)}
-            title="Open Creative Tools"
+            title="Toggle Creative Tools"
           >
-            🎨 Creative
+            {showCreativeTools ? '📝 Code' : '🎨 Creative'}
           </button>
           <button 
             className="about-button"
@@ -583,165 +648,185 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
       </div>
       
       {showCreativeTools ? (
-        <CreativeTools onSelectTemplate={handleTemplateSelect} />
-      ) : (
-      <PanelGroup direction="horizontal" className="ide-body-panels">
-        <Panel defaultSize={20} minSize={15} className="file-explorer-panel">
-          <FileExplorer 
-            fileTree={fileTree} 
-            onSelectFile={handleSelectFile} 
-            onDeleteNode={handleDeleteNode}
-            onCreateFile={() => handleCreateNode('file')}
-            onCreateFolder={() => handleCreateNode('folder')}
-          />
-        </Panel>
-        <PanelResizeHandle className="resize-handle-horizontal" />
-        <Panel minSize={30}>
-          <TabsBar 
-            openFiles={openFiles}
-            activeFileId={activeFileId}
-            onSelectTab={handleSetActiveTab}
-            onCloseTab={handleCloseTab}
-          />
-          <PanelGroup direction="vertical" className="ide-main-panels" style={{height: 'calc(100% - 40px)'}}>
-            <Panel defaultSize={70} minSize={20}> 
-              <div className="editor-panel-content">
-        <CodeEditor 
-          language={language} 
-          code={code} 
-          theme={editorTheme}
-                  onChange={(value) => { 
-                    const newContent = value || '';
-                    setCode(newContent); 
-                    if (activeFileId) {
-                      const isNowDirty = localFileContentsDb[activeFileId] !== newContent;
-                      setOpenFiles(prev => prev.map(f => 
-                        f.id === activeFileId 
-                          ? {...f, content: newContent, isDirty: isNowDirty } 
-                          : f
-                      ));
-                    }
-                  }} 
+        <CreativeTools 
+          onSelectTemplate={handleTemplateSelect}
         />
-      </div>
-            </Panel>
-            <PanelResizeHandle className="resize-handle-vertical" />
-            <Panel defaultSize={30} minSize={10}> 
-              <div className="output-panel-content" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  background: 'var(--color-bg-secondary)',
-                  borderBottom: '1px solid var(--color-border-primary)',
-                  padding: '6px 12px',
-                  fontWeight: 500,
-                  fontSize: '1rem',
-                  color: 'var(--color-accent-primary)',
-                  letterSpacing: '0.5px',
-                  boxShadow: '0 2px 6px 0 rgba(0,0,0,0.04)'
-                }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span role="img" aria-label="output">🖥️</span> Output
-                  </span>
-                  <button
-                    style={{
-                      background: 'transparent',
-                      border: 'none',
-                      color: 'var(--color-accent-primary)',
-                      fontWeight: 500,
-                      cursor: 'pointer',
-                      fontSize: '0.95rem',
-                      padding: '2px 8px',
-                      borderRadius: 4,
-                      transition: 'background 0.2s',
-                    }}
-                    onClick={() => setOutput([])}
-                    title="Clear Output"
-                  >
-                    Clear
-                  </button>
+      ) : (
+        <PanelGroup direction="horizontal" className="ide-body-panels">
+          <Panel defaultSize={20} minSize={15} className="file-explorer-panel">
+            <FileExplorer 
+              fileTree={fileTree} 
+              onSelectFile={handleSelectFile} 
+              onDeleteNode={handleDeleteNode}
+              onCreateFile={() => handleCreateNode('file')}
+              onCreateFolder={() => handleCreateNode('folder')}
+            />
+          </Panel>
+          <PanelResizeHandle className="resize-handle-horizontal" />
+          <Panel minSize={30}>
+            <TabsBar 
+              openFiles={openFiles}
+              activeFileId={activeFileId}
+              onSelectTab={handleSetActiveTab}
+              onCloseTab={handleCloseTab}
+            />
+            <PanelGroup direction="vertical" className="ide-main-panels" style={{height: 'calc(100% - 40px)'}}>
+              <Panel defaultSize={70} minSize={20}> 
+                <div className="editor-panel-content">
+                  <CodeEditor 
+                    language={language} 
+                    code={code} 
+                    theme={editorTheme}
+                    onChange={(value) => { 
+                      const newContent = value || '';
+                      setCode(newContent); 
+                      if (activeFileId) {
+                        const isNowDirty = localFileContentsDb[activeFileId] !== newContent;
+                        setOpenFiles(prev => prev.map(f => 
+                          f.id === activeFileId 
+                            ? {...f, content: newContent, isDirty: isNowDirty } 
+                            : f
+                        ));
+                      }
+                    }} 
+                  />
                 </div>
-                <div style={{
-                  flexGrow: 1,
-                  overflowY: 'auto',
-                  background: 'var(--terminal-bg)',
-                  color: 'var(--terminal-text)',
-                  padding: '12px',
-                  whiteSpace: 'pre-wrap',
-                  wordBreak: 'break-all',
-                  borderBottom: '1px solid var(--color-border-primary)',
-                  minHeight: 0,
-                  fontFamily: 'var(--font-family-mono)',
-                  fontSize: 14,
-                  position: 'relative',
-                }}>
-                  {(() => {
-                    // Filter out system/status messages and empty lines
-                    const statusPatterns = [
-                      /connection established/i,
-                      /preparing to execute/i,
-                      /execution finished/i,
-                      /connection closed/i,
-                      /anny is/i,
-                      /^\s*$/
-                    ];
-                    const importantLines = output.filter(line =>
-                      !statusPatterns.some(pattern => pattern.test(line))
-                    );
-                    return importantLines.length === 0 ? (
-                      <span style={{ color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
-                        No output yet. Run your code to see results here.
-                      </span>
-                    ) : (
-                      importantLines.map((line, index) => {
-                        const isError = line.toLowerCase().includes('error') || line.toLowerCase().includes('failed');
-                        return (
-                          <div
-                            key={index}
-                            style={{
-                              color: isError ? '#ff4d4f' : 'var(--terminal-text)',
-                              fontWeight: isError ? 600 : 400,
-                              marginBottom: 2,
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 4,
-                            }}
-                          >
-                            {isError && <span role="img" aria-label="error" style={{ fontSize: 16 }}>❗</span>}
-                            <span>{line}</span>
-                          </div>
-                        );
-                      })
-                    );
-                  })()}
-                  <div ref={outputEndRef} />
-                </div>
-                <input
-                  type="text"
-                  value={terminalInput}
-                  onChange={handleTerminalInputChange}
-                  onKeyDown={handleTerminalInputSubmit}
-                  placeholder="Type input here and press Enter..."
-                  disabled={!isConnected || loading}
-                  style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: 'none',
-                    borderTop: `1px solid var(--color-border-primary)`,
-                    background: 'var(--color-bg-tertiary)',
-                    color: 'var(--color-text-primary)',
-                    boxSizing: 'border-box',
-                    outline: 'none',
+              </Panel>
+              <PanelResizeHandle className="resize-handle-vertical" />
+              <Panel defaultSize={30} minSize={10}> 
+                <div className="output-panel-content" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    background: 'var(--color-bg-secondary)',
+                    borderBottom: '1px solid var(--color-border-primary)',
+                    padding: '6px 12px',
+                    fontWeight: 500,
+                    fontSize: '1rem',
+                    color: 'var(--color-accent-primary)',
+                    letterSpacing: '0.5px',
+                    boxShadow: '0 2px 6px 0 rgba(0,0,0,0.04)'
+                  }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <span role="img" aria-label="output">🖥️</span> Output
+                    </span>
+                    <button
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: 'var(--color-accent-primary)',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        fontSize: '0.95rem',
+                        padding: '2px 8px',
+                        borderRadius: 4,
+                        transition: 'background 0.2s',
+                      }}
+                      onClick={() => setOutput([])}
+                      title="Clear Output"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                  <div style={{
+                    flexGrow: 1,
+                    overflowY: 'auto',
+                    background: 'var(--terminal-bg)',
+                    color: 'var(--terminal-text)',
+                    padding: '12px',
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-all',
+                    borderBottom: '1px solid var(--color-border-primary)',
+                    minHeight: 0,
                     fontFamily: 'var(--font-family-mono)',
                     fontSize: 14,
-                  }}
-                />
-      </div>
-            </Panel>
-          </PanelGroup>
-        </Panel>
-      </PanelGroup>
+                    position: 'relative',
+                  }}>
+                    {(() => {
+                      // Filter out system/status messages and empty lines
+                      const statusPatterns = [
+                        /connection established/i,
+                        /preparing to execute/i,
+                        /execution finished/i,
+                        /connection closed/i,
+                        /anny is/i,
+                        /^\s*$/
+                      ];
+                      const importantLines = output.filter(line =>
+                        !statusPatterns.some(pattern => pattern.test(line))
+                      );
+                      return importantLines.length === 0 ? (
+                        <span style={{ color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
+                          No output yet. Run your code to see results here.
+                        </span>
+                      ) : (
+                        importantLines.map((line, index) => {
+                          const isError = line.toLowerCase().includes('error') || line.toLowerCase().includes('failed');
+                          return (
+                            <div
+                              key={index}
+                              style={{
+                                color: isError ? '#ff4d4f' : 'var(--terminal-text)',
+                                fontWeight: isError ? 600 : 400,
+                                marginBottom: 2,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 4,
+                              }}
+                            >
+                              {isError && <span role="img" aria-label="error" style={{ fontSize: 16 }}>❗</span>}
+                              <span>{line}</span>
+                            </div>
+                          );
+                        })
+                      );
+                    })()}
+                    <div ref={outputEndRef} />
+                  </div>
+                  <input
+                    type="text"
+                    value={terminalInput}
+                    onChange={handleTerminalInputChange}
+                    onKeyDown={handleTerminalInputSubmit}
+                    placeholder="Type input here and press Enter..."
+                    disabled={!isConnected || loading}
+                    style={{
+                      width: '100%',
+                      padding: '8px',
+                      border: 'none',
+                      borderTop: `1px solid var(--color-border-primary)`,
+                      background: 'var(--color-bg-tertiary)',
+                      color: 'var(--color-text-primary)',
+                      boxSizing: 'border-box',
+                      outline: 'none',
+                      fontFamily: 'var(--font-family-mono)',
+                      fontSize: 14,
+                    }}
+                  />
+                </div>
+              </Panel>
+            </PanelGroup>
+          </Panel>
+        </PanelGroup>
+      )}
+      
+      <CharacterGuide 
+        message={guideMessage} 
+        isCelebrating={robotMood === 'celebrating'}
+        isSad={robotMood === 'sad'}
+        onDismissMessage={handleDismissGuideMessage}
+        isModalOpen={showCreateModal}
+      />
+
+      {showCreateModal && (
+        <CreateFileModal
+          isOpen={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
+          onSubmit={handleCreateModalSubmit}
+          type={createModalType}
+          existingNames={getExistingNames(createModalParentId)}
+        />
       )}
     </div>
   );

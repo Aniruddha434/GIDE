@@ -8,14 +8,18 @@ interface CharacterGuideProps {
   isCelebrating?: boolean; // New prop for celebration state
   isSad?: boolean; // New prop for sad state
   onDismissMessage?: () => void; // New prop to handle message dismissal
+  isModalOpen?: boolean;  // Add new prop
 }
 
 const CharacterGuide: React.FC<CharacterGuideProps> = ({ 
   message, 
   isCelebrating, 
   isSad, 
-  onDismissMessage 
+  onDismissMessage,
+  isModalOpen = false  // Default to false
 }) => {
+  if (!message || isModalOpen) return null;  // Hide when modal is open
+
   let robotStateClass = styles.robotImage;
   if (isCelebrating) {
     robotStateClass = `${styles.robotImage} ${styles.robotDancing}`;

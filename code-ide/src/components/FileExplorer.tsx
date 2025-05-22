@@ -6,25 +6,23 @@ export interface FileSystemNode {
   name: string;
   type: 'file' | 'folder';
   children?: FileSystemNode[];
-  // content?: string; // Will be added later when we load file content
 }
 
 interface FileExplorerProps {
   fileTree: FileSystemNode[];
-  onSelectFile: (fileId: string, fileName: string) => void; // Pass fileName for tab title later
-  onDeleteNode: (nodeId: string) => void; // Added for deleting nodes
-  onCreateFile: (parentId: string | null) => void; // Modified to accept parentId
-  onCreateFolder: (parentId: string | null) => void; // Modified to accept parentId
-  // onOpenFile: (fileId: string, content: string) => void; // For loading content
+  onSelectFile: (fileId: string, fileName: string) => void;
+  onDeleteNode: (nodeId: string) => void;
+  onCreateFile: (parentId: string | null) => void;
+  onCreateFolder: (parentId: string | null) => void;
 }
 
 interface TreeNodeProps {
   node: FileSystemNode;
   onSelectFile: (fileId: string, fileName: string) => void;
-  onDeleteNode: (nodeId: string) => void; // Added for deleting nodes
+  onDeleteNode: (nodeId: string) => void;
   level: number;
-  selectedFolderId: string | null; // To highlight selected folder
-  onSelectFolder: (folderId: string | null) => void; // To set the selected folder for creation context
+  selectedFolderId: string | null;
+  onSelectFolder: (folderId: string | null) => void;
   onCreateFileInFolder: (folderId: string) => void;
   onCreateSubfolder: (folderId: string) => void;
 }
@@ -39,7 +37,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     onCreateFileInFolder,
     onCreateSubfolder 
 }) => {
-  const [isOpen, setIsOpen] = useState(node.type === 'folder'); // Folders open by default
+  const [isOpen, setIsOpen] = useState(node.type === 'folder');
 
   const handleToggle = () => {
     if (node.type === 'folder') {
@@ -50,16 +48,14 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   const handleNodeClick = () => {
     if (node.type === 'file') {
       onSelectFile(node.id, node.name);
-      onSelectFolder(null); // Clear folder selection when a file is selected
-    } else { // node.type === 'folder'
-      onSelectFolder(node.id); // Select this folder
-      // Optionally toggle if that's desired behavior on folder name click
-      // handleToggle(); 
+      onSelectFolder(null);
+    } else {
+      onSelectFolder(node.id);
     }
   };
 
   const handleDelete = (event: React.MouseEvent) => {
-    event.stopPropagation(); // Prevent triggering onSelect or onToggle
+    event.stopPropagation();
     onDeleteNode(node.id);
   };
   
@@ -73,39 +69,42 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     onCreateSubfolder(node.id);
   };
 
-  const indent = level * 15; // Indentation for nesting
-  const isSelected = node.type === 'folder' && node.id === selectedFolderId;
   const fileType = node.type === 'file' ? node.name.split('.').pop()?.toLowerCase() : undefined;
+  const isSelected = node.type === 'folder' && node.id === selectedFolderId;
+
+  const getFileIcon = () => {
+    if (node.type === 'folder') {
+      return isOpen ? '📂' : '📁';
+    }
+    switch (fileType) {
+      case 'py': return '📄';
+      case 'js': return '📄';
+      case 'html': return '📄';
+      case 'css': return '📄';
+      case 'json': return '📄';
+      case 'md': return '📄';
+      default: return '📄';
+    }
+  };
 
   return (
     <div className={styles.treeNodeContainer}>
       <div 
-        className={`${styles.treeNode} ${node.type === 'folder' ? styles.folderNode : styles.fileNode} ${isSelected ? styles.selectedFolder : ''}`}
-        style={{ paddingLeft: `${indent}px` }}
+        className={`${styles.treeNode} ${isSelected ? styles.selectedFolder : ''}`}
         onClick={handleNodeClick}
-        data-file-type={fileType}
       >
-        {node.type === 'folder' && (
-          <span className={`${styles.icon} ${isOpen ? styles.openIcon : styles.closedIcon}`} onClick={(e) => { e.stopPropagation(); handleToggle();}} >
-            {isOpen ? '📂' : '📁'} {/* Simple folder icons */}
-          </span>
-        )}
-        {node.type === 'file' && (
-          <span className={styles.icon}>
-            {fileType === 'py' ? '🐍' :
-             fileType === 'js' ? '📜' :
-             fileType === 'html' ? '🌐' :
-             fileType === 'css' ? '🎨' :
-             fileType === 'json' ? '📋' :
-             fileType === 'md' ? '📝' : '📄'}
-          </span>
-        )}
+        <span 
+          className={styles.icon} 
+          onClick={(e) => { e.stopPropagation(); handleToggle(); }}
+        >
+          {getFileIcon()}
+        </span>
         <span className={styles.nodeName}>{node.name}</span>
         <div className={styles.nodeActions}>
           {node.type === 'folder' && (
             <>
-              <button onClick={handleCreateFileHere} title="New File in this folder" className={styles.actionButtonInline}>📄+</button>
-              <button onClick={handleCreateSubfolderHere} title="New Subfolder" className={styles.actionButtonInline}>📁+</button>
+              <button onClick={handleCreateFileHere} title="New File" className={styles.actionButtonInline}>+</button>
+              <button onClick={handleCreateSubfolderHere} title="New Folder" className={styles.actionButtonInline}>+</button>
             </>
           )}
           <button
@@ -145,24 +144,13 @@ const FileExplorer: React.FC<FileExplorerProps> = ({ fileTree, onSelectFile, onD
     setSelectedFolderId(folderId);
   };
 
-  // Wrapper for onCreateFile to pass the currently selected folder ID or null for root
-  const handleCreateFileRequest = () => {
-    onCreateFile(selectedFolderId); 
-  };
-
-  // Wrapper for onCreateFolder to pass the currently selected folder ID or null for root
-  const handleCreateFolderRequest = () => {
-    onCreateFolder(selectedFolderId);
-  };
-
   return (
     <div className={styles.fileExplorerContainer}>
       <div className={styles.header}>
-        <span>{selectedFolderId ? `Selected: ${fileTree.find(n => n.id === selectedFolderId)?.name || 'Folder'}` : 'Files'}</span>
+        <span>Files</span>
         <div className={styles.headerActions}>
-          {/* These buttons now create at root or in selected folder based on selectedFolderId */}
-          <button onClick={handleCreateFileRequest} title={selectedFolderId ? "New File in Selected Folder" : "New File at Root"} className={styles.actionButton}>📄+</button>
-          <button onClick={handleCreateFolderRequest} title={selectedFolderId ? "New Folder in Selected Folder" : "New Folder at Root"} className={styles.actionButton}>📁+</button>
+          <button onClick={() => onCreateFile(selectedFolderId)} title="New File" className={styles.actionButton}>New File</button>
+          <button onClick={() => onCreateFolder(selectedFolderId)} title="New Folder" className={styles.actionButton}>New Folder</button>
         </div>
       </div>
       {fileTree.map((node) => (
@@ -174,8 +162,8 @@ const FileExplorer: React.FC<FileExplorerProps> = ({ fileTree, onSelectFile, onD
             level={0} 
             selectedFolderId={selectedFolderId}
             onSelectFolder={handleSelectFolder}
-            onCreateFileInFolder={onCreateFile} // Directly pass IDE's creation function
-            onCreateSubfolder={onCreateFolder}  // Directly pass IDE's creation function
+            onCreateFileInFolder={onCreateFile}
+            onCreateSubfolder={onCreateFolder}
         />
       ))}
     </div>

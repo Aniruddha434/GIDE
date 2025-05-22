@@ -1,14 +1,107 @@
 .creativeToolsContainer {
+  width: 100%;
+  height: 100%;
+  padding: var(--spacing-lg);
   background: var(--color-bg-primary);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  margin: 20px;
-  padding: 24px;
-  height: calc(100vh - 120px);
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  overflow: hidden;
+  gap: var(--spacing-md);
+}
+
+.toolsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--spacing-md);
+  border-bottom: 3px solid var(--color-border-primary);
+}
+
+.toolsHeader h2 {
+  font-family: var(--font-family-primary);
+  font-size: 1.8rem;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.toolButton {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-family: var(--font-family-primary);
+  font-size: 1.2rem;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border: 3px solid var(--color-border-primary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.toolButton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.toolButton:active {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.templatesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+}
+
+.templateCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  background: var(--color-bg-primary);
+  border: 3px solid var(--color-border-primary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.templateCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.templateCard:active {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.templateIcon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.templateName {
+  font-family: var(--font-family-primary);
+  font-size: 1.2rem;
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  .creativeToolsContainer {
+    background: var(--color-bg-primary);
+  }
+  
+  .templateCard {
+    background: var(--color-bg-secondary);
+  }
+  
+  .toolButton {
+    background: var(--color-bg-secondary);
+  }
 }
 
 .tabs {
@@ -93,18 +186,6 @@
   margin-bottom: 32px;
 }
 
-.templateCard {
-  background: var(--color-bg-secondary);
-  border-radius: 12px;
-  padding: 24px;
-  border: 1px solid var(--color-border-primary);
-  transition: all 0.3s ease;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  animation: fadeIn 0.5s ease-out;
-}
-
 .templateCard::before {
   content: '';
   position: absolute;
@@ -115,31 +196,6 @@
   background: linear-gradient(90deg, var(--color-accent-primary), #ff6b6b);
   opacity: 0;
   transition: opacity 0.3s ease;
-}
-
-.templateCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  border-color: var(--color-accent-primary);
-}
-
-.templateCard:hover::before {
-  opacity: 1;
-}
-
-.templateCard h3 {
-  font-size: 1.4rem;
-  color: var(--color-text-primary);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.templateCard p {
-  color: var(--color-text-secondary);
-  line-height: 1.5;
-  margin-bottom: 20px;
 }
 
 .templateMeta {

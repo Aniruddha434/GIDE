@@ -5,7 +5,9 @@ interface CreativeToolsProps {
   onSelectTemplate: (template: string) => void;
 }
 
-const CreativeTools: React.FC<CreativeToolsProps> = ({ onSelectTemplate }) => {
+const CreativeTools: React.FC<CreativeToolsProps> = ({ 
+  onSelectTemplate
+}) => {
   const [activeTab, setActiveTab] = useState<'animations' | 'music' | 'drawing' | 'stories'>('animations');
 
   const templates = {
@@ -402,84 +404,39 @@ if __name__ == "__main__":
 
   return (
     <div className={styles.creativeToolsContainer}>
-      <div className={styles.tabs}>
-        <button 
-          className={activeTab === 'animations' ? styles.activeTab : ''} 
-          onClick={() => setActiveTab('animations')}
-        >
-          Animations
-        </button>
-        <button 
-          className={activeTab === 'music' ? styles.activeTab : ''} 
-          onClick={() => setActiveTab('music')}
-        >
-          Music
-        </button>
-        <button 
-          className={activeTab === 'drawing' ? styles.activeTab : ''} 
-          onClick={() => setActiveTab('drawing')}
-        >
-          Drawing
-        </button>
-        <button 
-          className={activeTab === 'stories' ? styles.activeTab : ''} 
-          onClick={() => setActiveTab('stories')}
-        >
-          Stories
-        </button>
+      <div className={styles.toolsHeader}>
+        <h2>Creative Tools</h2>
       </div>
-
-      <div className={styles.content}>
-        <h2>Creative Coding Templates</h2>
-        <div className={styles.instructions}>
-          <p>
-            Welcome to the Creative Coding section! Here you'll find templates to help you learn coding through creative projects.
-            Each template includes example code and step-by-step instructions. Choose a category and template to get started!
-          </p>
-        </div>
-
-        <div className={styles.templates}>
-          {templates[activeTab].map((template, index) => (
-            <div 
-              key={index} 
-              className={styles.templateCard}
-              onClick={() => onSelectTemplate(template.code)}
-            >
-              <h3>{template.title}</h3>
-              <p>{template.description}</p>
-              <div className={styles.templateMeta}>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                  <span className={styles.language}>{template.language}</span>
-                  <span style={{ 
-                    background: template.difficulty === 'Beginner' ? '#4CAF50' : 
-                              template.difficulty === 'Intermediate' ? '#FFC107' : '#F44336',
-                    color: 'white',
-                    padding: '4px 8px',
-                    borderRadius: '12px',
-                    fontSize: '0.8rem',
-                    fontWeight: '500'
-                  }}>
-                    {template.difficulty}
-                  </span>
-                </div>
-                <button className={styles.useTemplate}>
-                  Use Template
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className={styles.requirements}>
-          <h4>Requirements & Setup</h4>
-          <ul>
-            <li>For Python animations and drawing: The <code>turtle</code> module (built into Python)</li>
-            <li>For Python music: The <code>pygame</code> module (needs to be installed)</li>
-            <li>For JavaScript: No additional requirements needed</li>
-            <li>Each template includes error handling and comments explaining how it works</li>
-            <li>Feel free to modify the code and experiment!</li>
-          </ul>
-        </div>
+      
+      <div className={styles.templatesGrid}>
+        <button
+          className={styles.templateCard}
+          onClick={() => onSelectTemplate('draw_circle')}
+        >
+          <span className={styles.templateIcon}>⭕</span>
+          <span className={styles.templateName}>Draw Circle</span>
+        </button>
+        <button
+          className={styles.templateCard}
+          onClick={() => onSelectTemplate('draw_square')}
+        >
+          <span className={styles.templateIcon}>⬛</span>
+          <span className={styles.templateName}>Draw Square</span>
+        </button>
+        <button
+          className={styles.templateCard}
+          onClick={() => onSelectTemplate('draw_triangle')}
+        >
+          <span className={styles.templateIcon}>▲</span>
+          <span className={styles.templateName}>Draw Triangle</span>
+        </button>
+        <button
+          className={styles.templateCard}
+          onClick={() => onSelectTemplate('draw_star')}
+        >
+          <span className={styles.templateIcon}>⭐</span>
+          <span className={styles.templateName}>Draw Star</span>
+        </button>
       </div>
     </div>
   );

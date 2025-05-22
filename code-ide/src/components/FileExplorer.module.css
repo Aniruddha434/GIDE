@@ -1,233 +1,136 @@
 /* FileExplorer.module.css */
 .fileExplorerContainer {
   height: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, var(--file-explorer-bg-start), var(--file-explorer-bg-end));
+  padding: 8px;
+  background: var(--file-explorer-bg);
   overflow-y: auto;
-  font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 14px;
 }
 
 .header {
-  padding: 12px;
-  margin-bottom: 12px;
-  background: linear-gradient(45deg, var(--file-explorer-header-start), var(--file-explorer-header-end));
-  border-radius: 15px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: var(--file-explorer-header-bg);
+  border-radius: 4px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  animation: slideDown 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  box-shadow: 0 4px 15px var(--file-explorer-shadow);
-  border: 3px solid var(--file-explorer-border);
+  border-bottom: 1px solid var(--file-explorer-border);
 }
 
-.header h3 {
-  margin: 0;
-  font-size: 1.2rem;
-  color: #FFFFFF;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+.header span {
+  font-weight: 500;
+  color: var(--file-explorer-text);
 }
 
-.actionButtons {
+.headerActions {
   display: flex;
-  gap: 2px;
+  gap: 4px;
 }
 
 .actionButton {
-  background: linear-gradient(45deg, var(--file-explorer-accent), var(--file-explorer-accent-hover));
-  border: 2px solid #FFFFFF;
+  background: var(--file-explorer-button-bg);
+  border: 1px solid var(--file-explorer-border);
   color: var(--file-explorer-text);
-  padding: 6px 12px;
-  border-radius: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  box-shadow: 0 2px 8px var(--file-explorer-shadow);
+  font-size: 13px;
+  transition: background-color 0.2s ease;
 }
 
 .actionButton:hover {
-  transform: scale(1.1) rotate(5deg);
-  background: linear-gradient(45deg, var(--file-explorer-accent-hover), var(--file-explorer-accent));
-  color: var(--file-explorer-text);
-  box-shadow: 0 4px 15px var(--file-explorer-shadow);
+  background: var(--file-explorer-button-hover);
 }
 
-.treeContainer {
-  padding: 8px;
-  animation: fadeIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+.treeNodeContainer {
+  margin: 2px 0;
 }
 
 .treeNode {
-  padding: 8px 12px;
-  margin: 4px 0;
+  padding: 6px 8px;
+  margin: 1px 0;
   cursor: pointer;
-  border-radius: 12px;
-  font-size: 1.1rem;
+  border-radius: 4px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: var(--file-explorer-text);
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid transparent;
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  animation: filePop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  box-shadow: 0 2px 8px var(--file-explorer-shadow);
+  transition: background-color 0.2s ease;
 }
 
 .treeNode:hover {
-  transform: translateX(8px) scale(1.02);
-  background: rgba(255, 255, 255, 0.15);
-  border-color: var(--file-explorer-border);
-  box-shadow: 0 4px 15px var(--file-explorer-shadow);
+  background: var(--file-explorer-hover);
 }
 
-.treeNode.selected {
-  animation: fileShake 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  background: linear-gradient(45deg, var(--file-explorer-header-start), var(--file-explorer-header-end));
-  color: #FFFFFF;
-  border-color: var(--file-explorer-border);
-  box-shadow: 0 4px 15px var(--file-explorer-shadow);
+.treeNode.selectedFolder {
+  background: var(--file-explorer-selected);
 }
 
-.treeNodeIcon {
-  font-size: 1.2rem;
-  width: 24px;
-  text-align: center;
-  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 14px;
 }
 
-.treeNodeIcon[data-type="folder"] {
-  color: var(--file-explorer-folder);
-}
-
-.treeNodeIcon[data-type="file"] {
-  color: var(--file-explorer-file);
-}
-
-.treeNodeIcon[data-type="file"][data-ext=".py"] {
-  color: var(--file-explorer-python);
-}
-
-.treeNodeIcon[data-type="file"][data-ext=".js"] {
-  color: var(--file-explorer-js);
-}
-
-.treeNodeIcon[data-type="file"][data-ext=".html"] {
-  color: var(--file-explorer-html);
-}
-
-.treeNodeIcon[data-type="file"][data-ext=".css"] {
-  color: var(--file-explorer-css);
-}
-
-.treeNodeName {
+.nodeName {
   flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-weight: bold;
-}
-
-.treeNodeChildren {
-  margin-left: 24px;
-  border-left: 2px dashed var(--file-explorer-border);
-  padding-left: 12px;
-}
-
-/* Fun animations */
-@keyframes filePop {
-  0% { transform: scale(0.8) rotate(-5deg); opacity: 0; }
-  50% { transform: scale(1.1) rotate(5deg); }
-  100% { transform: scale(1) rotate(0); opacity: 1; }
-}
-
-@keyframes folderBounce {
-  0% { transform: translateY(0) rotate(0); }
-  50% { transform: translateY(-8px) rotate(5deg); }
-  100% { transform: translateY(0) rotate(0); }
-}
-
-@keyframes fileShake {
-  0%, 100% { transform: rotate(0) scale(1); }
-  25% { transform: rotate(-10deg) scale(1.1); }
-  75% { transform: rotate(10deg) scale(1.1); }
-}
-
-/* Add folder-specific animations */
-.treeNode[data-type="folder"] {
-  animation: folderBounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.treeNode[data-type="folder"]:hover {
-  animation: folderBounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
 }
 
 .nodeActions {
   display: flex;
   align-items: center;
-  margin-left: auto;
+  gap: 4px;
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: opacity 0.2s ease;
 }
 
 .treeNode:hover .nodeActions {
   opacity: 1;
-  transform: translateX(-4px);
 }
 
 .actionButtonInline {
-  background: linear-gradient(45deg, var(--file-explorer-accent), var(--file-explorer-accent-hover));
+  background: none;
   border: none;
   color: var(--file-explorer-text);
   cursor: pointer;
-  padding: 4px 8px;
-  font-size: 1.2rem;
-  border-radius: 8px;
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  box-shadow: 0 2px 8px var(--file-explorer-shadow);
-  min-width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 2px 4px;
+  font-size: 12px;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
 }
 
 .actionButtonInline:hover {
-  transform: scale(1.2) rotate(10deg);
-  background: linear-gradient(45deg, var(--file-explorer-accent-hover), var(--file-explorer-accent));
-  box-shadow: 0 4px 15px var(--file-explorer-shadow);
+  background: var(--file-explorer-button-hover);
 }
 
-/* Fun scrollbar */
+.childrenContainer {
+  margin-left: 16px;
+  border-left: 1px solid var(--file-explorer-border);
+  padding-left: 8px;
+}
+
+/* Scrollbar */
 .fileExplorerContainer::-webkit-scrollbar {
-  width: 16px;
+  width: 8px;
 }
 
 .fileExplorerContainer::-webkit-scrollbar-track {
-  background: var(--file-explorer-bg-end);
-  border-radius: 8px;
+  background: var(--file-explorer-bg);
 }
 
 .fileExplorerContainer::-webkit-scrollbar-thumb {
-  background: var(--file-explorer-header-start);
-  border-radius: 8px;
-  border: 3px solid var(--file-explorer-bg-end);
+  background: var(--file-explorer-scrollbar);
+  border-radius: 4px;
 }
 
 .fileExplorerContainer::-webkit-scrollbar-thumb:hover {
-  background: var(--file-explorer-header-end);
-}
-
-/* Add fun animations for the header */
-@keyframes slideDown {
-  0% { transform: translateY(-20px) rotate(-5deg); opacity: 0; }
-  50% { transform: translateY(10px) rotate(5deg); }
-  100% { transform: translateY(0) rotate(0); opacity: 1; }
-}
-
-/* Add fun loading animation for the tree container */
-@keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(20px) scale(0.9); }
-  50% { transform: translateY(-10px) scale(1.1); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+  background: var(--file-explorer-scrollbar-hover);
 } 

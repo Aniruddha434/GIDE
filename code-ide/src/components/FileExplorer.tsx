@@ -98,7 +98,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
           onClick={(e) => { e.stopPropagation(); handleToggle(); }}
         >
           {getFileIcon()}
-        </span>
+          </span>
         <span className={styles.nodeName}>{node.name}</span>
         <div className={styles.nodeActions}>
           {node.type === 'folder' && (

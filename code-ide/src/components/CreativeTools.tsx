@@ -8,9 +8,9 @@ interface CreativeToolsProps {
 const CreativeTools: React.FC<CreativeToolsProps> = ({ 
   onSelectTemplate
 }) => {
-  const [activeTab, setActiveTab] = useState<'animations' | 'music' | 'drawing' | 'stories'>('animations');
+  const [_activeTab, _setActiveTab] = useState<'animations' | 'music' | 'drawing' | 'stories'>('animations');
 
-  const templates = {
+  const _templates = {
     animations: [
       {
         title: "Bouncing Ball",

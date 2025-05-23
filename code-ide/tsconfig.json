@@ -16,7 +16,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "typeRoots": ["./node_modules/@types"],
-    "types": ["react", "react-dom", "three"]
+    "types": ["react", "react-dom", "three", "node"]
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

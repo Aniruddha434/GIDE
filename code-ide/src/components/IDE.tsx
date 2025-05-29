@@ -5,7 +5,7 @@ import {
   PanelResizeHandle,
 } from 'react-resizable-panels';
 import { v4 as uuidv4 } from 'uuid';
-import { HelpCircle, Blocks } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
 
 import CodeEditor from './CodeEditor';
 import LanguageSelector from './LanguageSelector';

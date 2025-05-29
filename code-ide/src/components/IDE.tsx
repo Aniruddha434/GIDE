@@ -5,7 +5,7 @@ import {
   PanelResizeHandle,
 } from 'react-resizable-panels';
 import { v4 as uuidv4 } from 'uuid';
-import { HelpCircle } from 'lucide-react';
+import { HelpCircle, Blocks } from 'lucide-react';
 
 import CodeEditor from './CodeEditor';
 import LanguageSelector from './LanguageSelector';
@@ -15,7 +15,6 @@ import type { FileSystemNode } from './FileExplorer';
 import type { RobotMood, Theme } from '../App';
 import useWebSocket, { type WebSocketMessage } from '../hooks/useWebSocket';
 import { ThemeToggle } from './ThemeToggle';
-import CreativeTools from './CreativeTools';
 import CreateFileModal from './CreateFileModal';
 import CharacterGuide from './CharacterGuide';
 
@@ -151,8 +150,6 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
   const outputEndRef = useRef<HTMLDivElement>(null);
 
   const editorTheme = currentTheme === 'light' ? 'vs' : 'vs-dark';
-
-  const [showCreativeTools, setShowCreativeTools] = useState(false);
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [createModalType, setCreateModalType] = useState<'file' | 'folder'>('file');
@@ -560,23 +557,6 @@ Write your markdown content here.`;
     }
   };
 
-  // Add handler for template selection
-  const handleTemplateSelect = (templateCode: string) => {
-    const newId = uuidv4();
-    const newFileName = `creative_${newId}.py`;
-    const newFile: OpenFile = {
-      id: newId,
-      name: newFileName,
-      language: 'python',
-      content: templateCode,
-      isDirty: true
-    };
-    setOpenFiles(prev => [...prev, newFile]);
-    setActiveFileId(newId);
-    setShowCreativeTools(false);
-    setGuideAppearance("Template loaded! You can now modify and run it.", 'normal');
-  };
-
   // Add handler for guide message dismissal
   const handleDismissGuideMessage = () => {
     setGuideMessage(undefined);
@@ -601,13 +581,6 @@ Write your markdown content here.`;
           </button>
           <button 
             className="about-button"
-            onClick={() => setShowCreativeTools(!showCreativeTools)}
-            title="Toggle Creative Tools"
-          >
-            {showCreativeTools ? '📝 Code' : '🎨 Creative'}
-          </button>
-          <button 
-            className="about-button"
             onClick={onToggleAboutMe} 
             title="About Aniruddha Gayki"
           >
@@ -629,11 +602,6 @@ Write your markdown content here.`;
         </div>
       </div>
       
-      {showCreativeTools ? (
-        <CreativeTools 
-          onSelectTemplate={handleTemplateSelect}
-        />
-      ) : (
       <PanelGroup direction="horizontal" className="ide-body-panels">
         <Panel defaultSize={20} minSize={15} className="file-explorer-panel">
           <FileExplorer 
@@ -655,10 +623,10 @@ Write your markdown content here.`;
           <PanelGroup direction="vertical" className="ide-main-panels" style={{height: 'calc(100% - 40px)'}}>
             <Panel defaultSize={70} minSize={20}> 
               <div className="editor-panel-content">
-        <CodeEditor 
-          language={language} 
-          code={code} 
-          theme={editorTheme}
+                <CodeEditor 
+                  language={language} 
+                  code={code} 
+                  theme={editorTheme}
                   onChange={(value) => { 
                     const newContent = value || '';
                     setCode(newContent); 
@@ -671,8 +639,8 @@ Write your markdown content here.`;
                       ));
                     }
                   }} 
-        />
-      </div>
+                />
+              </div>
             </Panel>
             <PanelResizeHandle className="resize-handle-vertical" />
             <Panel defaultSize={30} minSize={10}> 
@@ -786,12 +754,11 @@ Write your markdown content here.`;
                     fontSize: 14,
                   }}
                 />
-      </div>
+              </div>
             </Panel>
           </PanelGroup>
         </Panel>
       </PanelGroup>
-      )}
       
       <CharacterGuide 
         message={guideMessage} 

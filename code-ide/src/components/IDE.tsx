@@ -350,24 +350,6 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
     });
   };
   
-  const _nameExistsInScope = (
-    nameToCheck: string,
-    nodes: FileSystemNode[],
-    parentId: string | null
-  ): boolean => {
-    let scopeToSearch: FileSystemNode[] = nodes; // Default to root
-    if (parentId) {
-      const parentNode = findNodeById(nodes, parentId);
-      if (parentNode && parentNode.type === 'folder') {
-        scopeToSearch = parentNode.children || [];
-      } else {
-        console.warn(`Parent folder with ID ${parentId} not found or is not a folder. Cannot check name existence.`);
-        return true; 
-      }
-    }
-    return scopeToSearch.some(node => node.name.toLowerCase() === nameToCheck.toLowerCase());
-  };
-
   const removeNodeFromTree = (nodes: FileSystemNode[], nodeId: string): FileSystemNode[] => {
     return nodes.reduce((acc, node) => {
       if (node.id === nodeId) {

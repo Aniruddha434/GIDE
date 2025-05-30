@@ -1,3 +1,33 @@
+:root {
+  /* Dark theme colors */
+  --dark-bg-primary: #1a1b26;
+  --dark-bg-secondary: #24283b;
+  --dark-bg-tertiary: #2f334d;
+  --dark-text-primary: #a9b1d6;
+  --dark-text-secondary: #565f89;
+  --dark-accent-primary: #7aa2f7;
+  --dark-accent-secondary: #bb9af7;
+  --dark-border-primary: #414868;
+  --dark-border-secondary: #565f89;
+  --dark-success: #9ece6a;
+  --dark-warning: #e0af68;
+  --dark-error: #f7768e;
+
+  /* Light theme colors */
+  --light-bg-primary: #f5f5f5;
+  --light-bg-secondary: #ffffff;
+  --light-bg-tertiary: #e8e8e8;
+  --light-text-primary: #2d2d2d;
+  --light-text-secondary: #666666;
+  --light-accent-primary: #4a9eff;
+  --light-accent-secondary: #7c4dff;
+  --light-border-primary: #d1d1d1;
+  --light-border-secondary: #e0e0e0;
+  --light-success: #4caf50;
+  --light-warning: #ff9800;
+  --light-error: #f44336;
+}
+
 .toggleContainer {
   display: flex;
   align-items: center;
@@ -7,19 +37,19 @@
   padding: 4px; /* p-1 */
   border-radius: 9999px; /* rounded-full */
   cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: all 0.3s ease;
   position: relative; /* For absolute positioning of knob and icons */
   border: 1px solid; /* Base border */
 }
 
 .toggleContainer.dark {
-  background-color: var(--color-bg-tertiary); /* Darker background for dark mode */
-  border-color: var(--color-border-secondary);
+  background-color: var(--dark-bg-tertiary);
+  border-color: var(--dark-border-secondary);
 }
 
 .toggleContainer.light {
-  background-color: var(--color-bg-tertiary); /* Lighter background for light mode */
-  border-color: var(--color-border-secondary);
+  background-color: var(--light-bg-tertiary);
+  border-color: var(--light-border-secondary);
 }
 
 .iconsWrapper {
@@ -38,29 +68,29 @@
 .icon {
   width: 18px; /* w-4 (lucide default is 24, let's make it a bit smaller) */
   height: 18px; /* h-4 */
-  transition: opacity 0.3s ease, color 0.3s ease;
+  transition: all 0.3s ease;
   z-index: 1; /* Icons appear above the knob's colored background if needed, but generally knob covers them */
 }
 
 /* Default state for icons (inactive-like) */
 .sun {
-  color: var(--color-text-secondary);
+  color: var(--dark-text-secondary);
   opacity: 0; /* Initially hidden */
 }
 
 .moon {
-  color: var(--color-text-secondary);
+  color: var(--light-text-secondary);
   opacity: 0; /* Initially hidden */
 }
 
 /* Styles for when icons are active based on theme */
 .toggleContainer.dark .sun {
-  color: var(--color-accent-primary); /* Or a specific sun color for dark theme */
+  color: var(--dark-accent-primary); /* Or a specific sun color for dark theme */
   opacity: 1;
 }
 
 .toggleContainer.light .moon {
-  color: var(--color-accent-primary); /* Or a specific moon color for light theme */
+  color: var(--light-accent-primary); /* Or a specific moon color for light theme */
   opacity: 1;
 }
 
@@ -69,21 +99,22 @@
   width: 24px; /* w-6 */
   height: 24px; /* h-6 */
   border-radius: 9999px; /* rounded-full */
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  transition: all 0.3s ease;
   position: absolute;
   top: 3px; /* (Container height - knob height) / 2 - padding adjustment */
   left: 3px; /* Define initial left position */
   z-index: 2; /* Knob should be above the static icons' visual space if they weren't opacity 0 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   /* The knob effectively hides the icon it moves over, if icons were just changing color but not opacity */
 }
 
 .toggleContainer.dark .knob {
-  background-color: var(--color-bg-secondary); /* Dark knob for dark mode */
+  background-color: var(--dark-accent-primary);
   transform: translateX(0px); /* Knob is at its initial left: 3px position */
 }
 
 .toggleContainer.light .knob {
-  background-color: var(--color-bg-primary); /* Light knob for light mode */
+  background-color: var(--light-accent-primary);
   transform: translateX(34px); /* Moves 34px to the right from its initial left: 3px position. (64 - 24 - 3 - 3 = 34) */
   /* Calculation for translateX in light mode: container_width - knob_width - left_offset */
   /* Container width 64px, knob 24px. Left offset 3px. So, 64 - 24 - 3 = 37px. If padding is symmetrical, it's (64 - 24 - 3 - 3) = 34px for space to move. */
@@ -137,3 +168,31 @@
   transform: translateX(33px); 
 }
 */ 
+
+/* Hover effects */
+.toggleContainer:hover {
+  transform: scale(1.02);
+}
+
+.toggleContainer.dark:hover {
+  background-color: var(--dark-bg-secondary);
+}
+
+.toggleContainer.light:hover {
+  background-color: var(--light-bg-secondary);
+}
+
+/* Active state */
+.toggleContainer:active {
+  transform: scale(0.98);
+}
+
+/* Focus state for accessibility */
+.toggleContainer:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--dark-accent-primary);
+}
+
+.toggleContainer.light:focus {
+  box-shadow: 0 0 0 2px var(--light-accent-primary);
+} 

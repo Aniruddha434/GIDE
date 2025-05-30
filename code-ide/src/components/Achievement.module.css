@@ -1,0 +1,77 @@
+.achievementContainer {
+  position: fixed;
+  top: 20px;
+  right: -400px;
+  width: 360px;
+  background: var(--primary-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  transform: translateX(0);
+}
+
+.achievementContainer.visible {
+  transform: translateX(-420px);
+}
+
+.achievementContainer.exiting {
+  transform: translateX(20px);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.achievementContent {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.achievementIcon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.achievementInfo {
+  flex: 1;
+}
+
+.achievementTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.achievementDescription {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+@keyframes achievementUnlock {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.achievementContainer.visible .achievementContent {
+  animation: achievementUnlock 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+} 

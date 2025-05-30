@@ -285,7 +285,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Start server using the http server instance
-server.listen(PORT, () => {
-  console.log(`HTTP and WebSocket server running on port ${PORT}`);
+// Start the server
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on http://0.0.0.0:${PORT}`);
 }); 

@@ -5,7 +5,7 @@ import {
   PanelResizeHandle,
 } from 'react-resizable-panels';
 import { v4 as uuidv4 } from 'uuid';
-import { HelpCircle } from 'lucide-react';
+import { HelpCircle, Moon, Sun, Trophy, Play } from 'lucide-react';
 
 import CodeEditor from './CodeEditor';
 import LanguageSelector from './LanguageSelector';
@@ -17,16 +17,21 @@ import useWebSocket, { type WebSocketMessage } from '../hooks/useWebSocket';
 import { ThemeToggle } from './ThemeToggle';
 import CreateFileModal from './CreateFileModal';
 import CharacterGuide from './CharacterGuide';
+import Logo from './Logo';
+import Achievement, { Achievement as AchievementType } from './Achievement';
+import AchievementManager from '../utils/AchievementManager';
+import AchievementPanel from './AchievementPanel';
+import PlaygroundPanel from './Playground';
 
 // Define props interface for IDE
 interface IDEProps {
-  setGuideAppearance: (message: string | undefined, mood?: RobotMood) => void;
+  setGuideAppearance: (appearance: string) => void;
   getAiHint: boolean;
   onAiHintProcessed: () => void;
   onToggleAboutMe: () => void;
-  onToggleGuide?: () => void;
-  currentTheme: Theme;
-  onToggleTheme: () => void;
+  onToggleGuide: () => void;
+  currentTheme: 'light' | 'dark';
+  onToggleTheme: (theme: 'light' | 'dark') => void;
   onAskAiHint: () => void;
 }
 
@@ -122,7 +127,7 @@ export interface OpenFile {
 
 const WEBSOCKET_URL = 'ws://13.231.241.132:5000';
 
-const IDE: React.FC<IDEPropsWithAsk> = ({ 
+const IDE: React.FC<IDEProps> = ({ 
   setGuideAppearance, 
   getAiHint, 
   onAiHintProcessed,
@@ -157,6 +162,11 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
 
   const [guideMessage, setGuideMessage] = useState<string | undefined>();
   const [robotMood, _setRobotMood] = useState<'normal' | 'celebrating' | 'sad'>('normal');
+  const [currentAchievement, setCurrentAchievement] = useState<AchievementType | null>(null);
+  const achievementManager = AchievementManager.getInstance();
+
+  const [showAchievementPanel, setShowAchievementPanel] = useState(false);
+  const [showPlaygroundPanel, setShowPlaygroundPanel] = useState(false);
 
   useEffect(() => {
     outputEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -165,7 +175,7 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
   useEffect(() => {
     const fetchAiHint = async () => {
       if (getAiHint) {
-        setGuideAppearance("Anny is thinking... Please wait.", 'normal');
+        setGuideAppearance("Anny is thinking... Please wait.");
         try {
           const hasError = output.some(line => line.toLowerCase().startsWith('error:') || line.toLowerCase().includes('failed to run'));
           const hintType = hasError ? 'debug' : 'explain';
@@ -184,13 +194,13 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
           });
           const data = await response.json();
           if (data && data.success) {
-            setGuideAppearance(data.hint, 'normal');
+            setGuideAppearance(data.hint);
           } else {
-            setGuideAppearance(data.hint || "Sorry, Anny couldn't get a hint right now.", 'sad');
+            setGuideAppearance(data.hint || "Sorry, Anny couldn't get a hint right now.");
           }
         } catch (err) {
           console.error("Error fetching AI hint:", err);
-          setGuideAppearance("Oops! Anny had trouble connecting to the AI service. Try again later?", 'sad');
+          setGuideAppearance("Oops! Anny had trouble connecting to the AI service. Try again later?");
         }
         onAiHintProcessed();
       }
@@ -208,16 +218,16 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
         case 'status':
           if (message.output?.includes('Connection established')) {
             setLoading(false);
-            setGuideAppearance('Connected to execution server. Anny is ready to run your code!', 'normal');
+            setGuideAppearance('Connected to execution server. Anny is ready to run your code!');
           } else if (message.output?.includes('Preparing to execute')) {
             setLoading(true);
-            setGuideAppearance('Anny is executing your code... Hold tight!', 'normal');
+            setGuideAppearance('Anny is executing your code... Hold tight!');
           } else if (message.output?.includes('Execution finished')) {
             setLoading(false);
-            setGuideAppearance('Code execution finished! Great job, Anny thinks you are awesome!', 'celebrating');
+            setGuideAppearance('Code execution finished! Great job, Anny thinks you are awesome!');
           } else if (message.output?.includes('Connection closed')) {
             setLoading(false);
-            setGuideAppearance('Disconnected from execution server. Anny is a bit lonely now.', 'sad');
+            setGuideAppearance('Disconnected from execution server. Anny is a bit lonely now.');
           }
           break;
         case 'stdout':
@@ -225,11 +235,11 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
           break;
         case 'stderr':
           setLoading(false);
-          setGuideAppearance('Oops! Something went wrong during execution. Anny is sad.', 'sad');
+          setGuideAppearance('Oops! Something went wrong during execution. Anny is sad.');
           break;
         case 'error':
           setLoading(false);
-          setGuideAppearance(`Anny reports an error from server: ${message.output}`, 'sad');
+          setGuideAppearance(`Anny reports an error from server: ${message.output}`);
           break;
       default:
           break;
@@ -245,19 +255,31 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
         setCode(activeEditorFile.content);
         setLanguage(activeEditorFile.language);
       } else if (openFiles.length > 0) {
-        setActiveFileId(openFiles[openFiles.length - 1].id);
+        const lastFile = openFiles[openFiles.length - 1];
+        if (lastFile) {
+          setActiveFileId(lastFile.id);
+        }
       } else {
         setCode('// Select a file or click a tab to start coding');
         setLanguage('plaintext');
         setActiveFileId(null);
       }
     } else if (openFiles.length > 0) {
-        setActiveFileId(openFiles[0].id);
+      const firstFile = openFiles[0];
+      if (firstFile) {
+        setActiveFileId(firstFile.id);
+      }
     } else {
         setCode('// Select a file or click a tab to start coding');
         setLanguage('plaintext');
     }
   }, [activeFileId, openFiles]);
+
+  useEffect(() => {
+    achievementManager.setAchievementCallback((achievement) => {
+      setCurrentAchievement(achievement);
+    });
+  }, []);
 
   const getLanguageForFile = (fileName: string): string => {
     const extension = fileName.split('.').pop()?.toLowerCase();
@@ -277,12 +299,19 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
   };
 
   const handleSelectFile = (fileId: string, fileName: string) => {
+    // Check if file is already open
     const existingFile = openFiles.find(f => f.id === fileId);
+    
     if (existingFile) {
+      // If file is already open, just set it as active
       setActiveFileId(fileId);
+      setCode(existingFile.content);
+      setLanguage(existingFile.language);
     } else {
+      // If file is not open, create a new open file
       const fileLang = getLanguageForFile(fileName);
       const fileContent = localFileContentsDb[fileId] || `// Content for ${fileName} not found`;
+      
       const newOpenFile: OpenFile = { 
         id: fileId, 
         name: fileName, 
@@ -290,10 +319,15 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
         content: fileContent,
         isDirty: false
       };
-      setOpenFiles([...openFiles, newOpenFile]);
+      
+      // Add to open files and set as active
+      setOpenFiles(prevOpenFiles => [...prevOpenFiles, newOpenFile]);
       setActiveFileId(fileId);
+      setCode(fileContent);
+      setLanguage(fileLang);
     }
-    setGuideAppearance(`Opened ${fileName}. Ready to code!`, 'normal');
+    
+    setGuideAppearance(`Opened ${fileName}. Ready to code!`);
   };
   
   const handleCloseTab = (fileIdToClose: string) => {
@@ -374,7 +408,7 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
   const handleDeleteNode = (nodeId: string) => {
     const nodeToDelete = findNodeById(fileTree, nodeId);
     if (!nodeToDelete) {
-        setGuideAppearance('Could not find the item to delete.', 'sad');
+        setGuideAppearance('Could not find the item to delete.');
         return;
     }
 
@@ -394,7 +428,7 @@ const IDE: React.FC<IDEPropsWithAsk> = ({
       // For now, only direct deletion
       return newDb;
     });
-    setGuideAppearance(`${nodeToDelete.name} deleted.`, 'normal');
+    setGuideAppearance(`${nodeToDelete.name} deleted.`);
   };
 
   const getInitialContent = (fileName: string, fileLang: string): string => {
@@ -487,7 +521,7 @@ Write your markdown content here.`;
       setOpenFiles(prevOpenFiles => [...prevOpenFiles, newOpenFile]);
       setLocalFileContentsDb(prevDb => ({ ...prevDb, [newId]: initialContent }));
       setActiveFileId(newId);
-      setGuideAppearance(`File "${fileName}" created with ${fileLang} template!`, 'normal');
+      setGuideAppearance(`File "${fileName}" created with ${fileLang} template!`);
     } else {
       newNode = {
         id: newId,
@@ -496,7 +530,7 @@ Write your markdown content here.`;
         children: [],
       };
       setFileTree(prevTree => addNodeToTree(prevTree, newNode, createModalParentId));
-      setGuideAppearance(`Folder "${fileName}" created!`, 'normal');
+      setGuideAppearance(`Folder "${fileName}" created!`);
     }
 
     setShowCreateModal(false);
@@ -508,34 +542,58 @@ Write your markdown content here.`;
     return siblings.map(node => node.name);
   };
 
-  const handleRunCode = () => {
+  const handleRunCode = async () => {
     if (!activeFileId && openFiles.length === 0 && !code.trim()) {
-      setGuideAppearance("There's nothing to run! Try opening a file or writing some code. Anny is waiting!", 'normal');
+      setGuideAppearance("There's nothing to run! Try opening a file or writing some code. Anny is waiting!");
       return;
     }
     if (!isConnected || readyState !== WebSocket.OPEN) {
-      setGuideAppearance('Not connected to execution server. Anny is trying to connect...', 'sad');
+      setGuideAppearance('Not connected to execution server. Anny is trying to connect...');
       connect();
       return;
     }
 
     setOutput(['']);
     setLoading(true);
-    setGuideAppearance('Anny is sending your code to the server...', 'normal');
+    setGuideAppearance('Anny is sending your code to the server...');
 
     const activeEditorFile = openFiles.find(f => f.id === activeFileId);
-    const payload: { type: 'execute'; code: string; language: string; filename?: string } = {
-      type: 'execute' as const,
-      code: code,
-      language: language.toLowerCase()
-    };
-
-    if (language.toLowerCase() === 'java' && activeEditorFile) {
-      payload.filename = activeEditorFile.name;
+    const fileToRun = activeEditorFile || openFiles[0];
+    
+    if (!fileToRun) {
+      setGuideAppearance("No file to run! Please create or open a file first.");
+      setLoading(false);
+      return;
     }
 
-    console.log('[IDE.tsx] handleRunCode sending:', payload);
+    const fileContent = localFileContentsDb[fileToRun.id];
+    if (!fileContent) {
+      setGuideAppearance("Could not find file content. Please try again.");
+      setLoading(false);
+      return;
+    }
+
+    // Update the message format to match server expectations
+    const payload = {
+      type: 'execute',
+      code: fileContent,
+      language: fileToRun.language.toLowerCase(),
+      filename: fileToRun.name
+    };
+
+    console.log('[IDE.tsx] Sending execution request:', payload);
     sendMessage(payload);
+
+    try {
+      achievementManager.unlockAchievement('first_code');
+      if (language === 'python') {
+        achievementManager.unlockAchievement('python_master');
+      } else if (language === 'javascript') {
+        achievementManager.unlockAchievement('javascript_master');
+      }
+    } catch (error) {
+      console.error("Error unlocking achievement:", error);
+    }
   };
 
   const handleTerminalInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -562,15 +620,75 @@ Write your markdown content here.`;
     setGuideMessage(undefined);
   };
 
+  const handleAchievementClose = () => {
+    setCurrentAchievement(null);
+  };
+
+  const handleSaveFile = async () => {
+    // ... existing code ...
+    try {
+      // ... existing code ...
+      achievementManager.unlockAchievement('file_saver');
+    } catch (error) {
+      // ... existing error handling ...
+    }
+  };
+
+  const handleThemeToggle = () => {
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    onToggleTheme(newTheme);
+    achievementManager.unlockAchievement('theme_switcher');
+  };
+
+  const handlePlaygroundSelect = (playground: any) => {
+    // Create a new file ID for the playground
+    const newId = uuidv4();
+    const fileName = `${playground.id}.${playground.language === 'python' ? 'py' : 'js'}`;
+    
+    // Create a new file in the file tree
+    const newNode: FileSystemNode = {
+      id: newId,
+      name: fileName,
+      type: 'file',
+    };
+    
+    // Add the file to the file tree
+    setFileTree(prevTree => addNodeToTree(prevTree, newNode, null));
+    
+    // Add the file content to the local database
+    setLocalFileContentsDb(prevDb => ({
+      ...prevDb,
+      [newId]: playground.code
+    }));
+    
+    // Create a new open file
+    const newOpenFile: OpenFile = {
+      id: newId,
+      name: fileName,
+      language: playground.language,
+      content: playground.code,
+      isDirty: true
+    };
+    
+    // Add the file to open files and set it as active
+    setOpenFiles(prevOpenFiles => [...prevOpenFiles, newOpenFile]);
+    setActiveFileId(newId);
+    
+    // Close the playground panel
+    setShowPlaygroundPanel(false);
+    
+    // Show a message
+    setGuideAppearance(`Loaded ${playground.title} playground! You can now run it.`);
+  };
+
   return (
-    <div className="ide-container">
+    <div className={`ide-container ${currentTheme}`}>
       <div className="ide-header">
-        <div className="logo-title-container">
-          <span className="header-title-skool">Skool</span>
-          <span className="header-title-lab">Lab</span>
-        </div>
+        <Logo size="large" />
         <div className="ide-controls">
-          <ThemeToggle currentTheme={currentTheme} onToggleTheme={onToggleTheme} />
+          <button className="theme-toggle" onClick={handleThemeToggle}>
+            {currentTheme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+          </button>
           <LanguageSelector language={language} onChange={(lang) => setLanguage(lang)} />
           <button 
             className="run-button" 
@@ -580,11 +698,20 @@ Write your markdown content here.`;
             {loading ? 'Running...' : (isConnected ? '▶️ Run Code' : 'Connect')}
           </button>
           <button 
-            className="about-button"
-            onClick={onToggleAboutMe} 
-            title="About Aniruddha Gayki"
+            className="achievement-button"
+            onClick={() => setShowAchievementPanel(true)}
+            title="View Achievements"
           >
-            About
+            <Trophy size={18} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
+            Achievements
+          </button>
+          <button
+            className="playground-button"
+            onClick={() => setShowPlaygroundPanel(true)}
+            title="Code playgrounds"
+          >
+            <Play size={18} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
+            Playground
           </button>
           <button 
             className="about-button"
@@ -592,6 +719,13 @@ Write your markdown content here.`;
             title="Ask Anny for a code hint"
           >
             Ask Anny
+          </button>
+          <button 
+            className="about-button"
+            onClick={onToggleAboutMe} 
+            title="About Aniruddha Gayki"
+          >
+            About
           </button>
           {onToggleGuide && (
             <button onClick={onToggleGuide} className="about-button" title="Open Guide">
@@ -775,6 +909,26 @@ Write your markdown content here.`;
           onSubmit={handleCreateModalSubmit}
           type={createModalType}
           existingNames={getExistingNames(createModalParentId)}
+        />
+      )}
+
+      <AchievementPanel 
+        isOpen={showAchievementPanel}
+        onClose={() => setShowAchievementPanel(false)}
+      />
+
+      {currentAchievement && (
+        <Achievement
+          achievement={currentAchievement}
+          onClose={handleAchievementClose}
+        />
+      )}
+
+      {showPlaygroundPanel && (
+        <PlaygroundPanel
+          isOpen={showPlaygroundPanel}
+          onClose={() => setShowPlaygroundPanel(false)}
+          onSelectPlayground={handlePlaygroundSelect}
         />
       )}
     </div>

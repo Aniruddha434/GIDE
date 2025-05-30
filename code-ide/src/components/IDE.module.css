@@ -1,0 +1,73 @@
+.ide-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.ide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--header-background);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.ide-header-left {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.header-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border: none;
+  background: none;
+  color: var(--text-color);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.header-button:hover {
+  background-color: var(--hover-color);
+}
+
+.visual-blocks-container {
+  flex: 1;
+  padding: 1rem;
+  overflow: auto;
+  background-color: var(--background-color);
+}
+
+/* Panel styles */
+.panel {
+  background-color: var(--panel-background);
+  border-right: 1px solid var(--border-color);
+}
+
+.panel-resize-handle {
+  background-color: var(--border-color);
+  width: 4px;
+  cursor: col-resize;
+}
+
+.panel-resize-handle:hover {
+  background-color: var(--accent-color);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .ide-header {
+    padding: 0.5rem;
+  }
+
+  .header-button {
+    padding: 0.25rem;
+  }
+} 

@@ -21,6 +21,7 @@ const App: React.FC = () => {
   const [theme, setTheme] = useState<Theme>('dark');
   const [appContainerClasses, setAppContainerClasses] = useState<string>('app-container');
   const [showSplash, setShowSplash] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Effect for entry animation
   useEffect(() => {
@@ -33,15 +34,16 @@ const App: React.FC = () => {
     }
   }, []); // Empty dependency array ensures this runs only once on mount
 
-  // Function to toggle theme
-  const toggleTheme = () => {
-    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
-  };
-
   // Effect to apply theme class to body or a root element
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  // Function to handle theme change
+  const handleThemeChange = (newTheme: 'light' | 'dark') => {
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
 
   // Function to handle guide updates including celebration
   const updateGuide = (newMessage: string | undefined, mood: RobotMood = 'normal') => {
@@ -84,31 +86,40 @@ const App: React.FC = () => {
     setShowSplash(false);
   };
 
+  useEffect(() => {
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark';
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+  }, []);
+
   return (
-    <div className="app">
-      {showSplash && (
-        <SplashScreen onClose={handleSplashComplete} />
+    <div className="app" data-theme={theme}>
+      {isLoading ? (
+        <SplashScreen onClose={() => setIsLoading(false)} />
+      ) : (
+        <div className={appContainerClasses}>
+          <IDE 
+            setGuideAppearance={updateGuide} 
+            getAiHint={triggerAiHint} 
+            onAiHintProcessed={() => setTriggerAiHint(false)}
+            onToggleAboutMe={toggleAboutMe}
+            onToggleGuide={toggleGuideModal}
+            currentTheme={theme}
+            onToggleTheme={handleThemeChange}
+            onAskAiHint={handleAskAiHint}
+          />
+          <CharacterGuide 
+            message={guideMessage} 
+            isCelebrating={robotMood === 'celebrating'}
+            isSad={robotMood === 'sad'}
+            onDismissMessage={handleDismissGuideMessage}
+          />
+          {showAboutMe && <AboutMe onClose={toggleAboutMe} />}
+          {showGuideModal && <GuideModal onClose={toggleGuideModal} />}
+        </div>
       )}
-    <div className={appContainerClasses}>
-      <IDE 
-        setGuideAppearance={updateGuide} 
-        getAiHint={triggerAiHint} 
-        onAiHintProcessed={() => setTriggerAiHint(false)}
-        onToggleAboutMe={toggleAboutMe}
-        onToggleGuide={toggleGuideModal}
-        currentTheme={theme}
-        onToggleTheme={toggleTheme}
-        onAskAiHint={handleAskAiHint}
-      />
-      <CharacterGuide 
-        message={guideMessage} 
-        isCelebrating={robotMood === 'celebrating'}
-        isSad={robotMood === 'sad'}
-          onDismissMessage={handleDismissGuideMessage}
-      />
-      {showAboutMe && <AboutMe onClose={toggleAboutMe} />}
-      {showGuideModal && <GuideModal onClose={toggleGuideModal} />}
-      </div>
     </div>
   );
 };

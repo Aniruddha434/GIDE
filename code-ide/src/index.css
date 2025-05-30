@@ -1,20 +1,72 @@
 :root {
-  /* Default Dark Theme Variables */
-  --color-bg-primary: #24292e;
-  --color-bg-secondary: #1f2428;
-  --color-bg-tertiary: #2c313a;
-  --color-text-primary: #c9d1d9;
-  --color-text-primary-rgb: 201, 209, 217;
-  --color-text-secondary: #8b949e;
-  --color-accent-primary: #58a6ff;
-  --color-accent-secondary: #1f6feb;
-  --color-border-primary: #30363d;
-  --color-border-secondary: #444c56;
+  /* Dark theme colors */
+  --dark-bg-primary: #1a1b26;
+  --dark-bg-secondary: #24283b;
+  --dark-bg-tertiary: #2f334d;
+  --dark-text-primary: #a9b1d6;
+  --dark-text-secondary: #565f89;
+  --dark-accent-primary: #7aa2f7;
+  --dark-accent-secondary: #bb9af7;
+  --dark-border-primary: #414868;
+  --dark-border-secondary: #565f89;
+  --dark-success: #9ece6a;
+  --dark-warning: #e0af68;
+  --dark-error: #f7768e;
 
-  --editor-bg: #1e1e1e;
-  --editor-text: #d4d4d4;
-  --terminal-bg: #1c2126;
-  --terminal-text: #c9d1d9;
+  /* Light theme colors */
+  --light-bg-primary: #f5f5f5;
+  --light-bg-secondary: #ffffff;
+  --light-bg-tertiary: #e8e8e8;
+  --light-text-primary: #2d2d2d;
+  --light-text-secondary: #666666;
+  --light-accent-primary: #4a9eff;
+  --light-accent-secondary: #7c4dff;
+  --light-border-primary: #d1d1d1;
+  --light-border-secondary: #e0e0e0;
+  --light-success: #4caf50;
+  --light-warning: #ff9800;
+  --light-error: #f44336;
+
+  /* Font families */
+  --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', monospace;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+  /* Default theme (will be overridden by data-theme attribute) */
+  --color-bg-primary: var(--dark-bg-primary);
+  --color-bg-secondary: var(--dark-bg-secondary);
+  --color-bg-tertiary: var(--dark-bg-tertiary);
+  --color-text-primary: var(--dark-text-primary);
+  --color-text-secondary: var(--dark-text-secondary);
+  --color-accent-primary: var(--dark-accent-primary);
+  --color-accent-secondary: var(--dark-accent-secondary);
+  --color-border-primary: var(--dark-border-primary);
+  --color-border-secondary: var(--dark-border-secondary);
+  --color-success: var(--dark-success);
+  --color-warning: var(--dark-warning);
+  --color-error: var(--dark-error);
+
+  /* Editor and Terminal Colors - Dark Theme */
+  --editor-bg: var(--dark-bg-primary);
+  --editor-text: var(--dark-text-primary);
+  --terminal-bg: var(--dark-bg-primary);
+  --terminal-text: var(--dark-text-primary);
 
   /* Character Guide Specific - Dark */
   --character-guide-bubble-bg: rgba(58, 63, 71, 0.85);
@@ -28,9 +80,22 @@
   --character-guide-dismiss-text-hover: rgba(255, 255, 255, 1);
   --character-guide-box-shadow: rgba(0,0,0,0.3);
 
-  /* Font */
-  --font-family-sans: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  /* FileExplorer Theme Colors - Dark */
+  --file-explorer-bg-start: var(--dark-bg-primary);
+  --file-explorer-bg-end: var(--dark-bg-secondary);
+  --file-explorer-header-start: var(--dark-accent-primary);
+  --file-explorer-header-end: var(--dark-accent-secondary);
+  --file-explorer-accent: var(--dark-accent-primary);
+  --file-explorer-accent-hover: var(--dark-accent-secondary);
+  --file-explorer-text: var(--dark-text-primary);
+  --file-explorer-border: var(--dark-border-primary);
+  --file-explorer-shadow: rgba(0, 0, 0, 0.2);
+  --file-explorer-folder: var(--dark-accent-primary);
+  --file-explorer-file: var(--dark-text-primary);
+  --file-explorer-python: var(--dark-success);
+  --file-explorer-js: var(--dark-warning);
+  --file-explorer-html: var(--dark-accent-primary);
+  --file-explorer-css: var(--dark-accent-secondary);
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -42,71 +107,56 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  /* FileExplorer Theme Colors - Default (Dark) */
-  --file-explorer-bg-start: #1a2b3c;
-  --file-explorer-bg-end: #2c3e50;
-  --file-explorer-header-start: #3498db;
-  --file-explorer-header-end: #2980b9;
-  --file-explorer-accent: #f1c40f;
-  --file-explorer-accent-hover: #f39c12;
-  --file-explorer-text: #ecf0f1;
-  --file-explorer-border: #f1c40f;
-  --file-explorer-shadow: rgba(52, 152, 219, 0.2);
-  --file-explorer-folder: #f1c40f;
-  --file-explorer-file: #3498db;
-  --file-explorer-python: #2ecc71;
-  --file-explorer-js: #f1c40f;
-  --file-explorer-html: #e67e22;
-  --file-explorer-css: #3498db;
 }
 
 html[data-theme="light"] {
-  /* Light Theme Overrides */
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f6f8fa;
-  --color-bg-tertiary: #e1e4e8;
-  --color-text-primary: #24292e;
-  --color-text-primary-rgb: 36, 41, 46;
-  --color-text-secondary: #57606a;
-  --color-accent-primary: #0969da;
-  --color-accent-secondary: #0550ae;
-  --color-border-primary: #d0d7de;
-  --color-border-secondary: #bcc4ce;
+  --color-bg-primary: var(--light-bg-primary);
+  --color-bg-secondary: var(--light-bg-secondary);
+  --color-bg-tertiary: var(--light-bg-tertiary);
+  --color-text-primary: var(--light-text-primary);
+  --color-text-secondary: var(--light-text-secondary);
+  --color-accent-primary: var(--light-accent-primary);
+  --color-accent-secondary: var(--light-accent-secondary);
+  --color-border-primary: var(--light-border-primary);
+  --color-border-secondary: var(--light-border-secondary);
+  --color-success: var(--light-success);
+  --color-warning: var(--light-warning);
+  --color-error: var(--light-error);
 
-  --editor-bg: #ffffff;
-  --editor-text: #24292e;
-  --terminal-bg: #f6f8fa;
-  --terminal-text: #24292e;
+  /* Editor and Terminal Colors - Light Theme */
+  --editor-bg: var(--light-bg-primary);
+  --editor-text: var(--light-text-primary);
+  --terminal-bg: var(--light-bg-primary);
+  --terminal-text: var(--light-text-primary);
 
   /* Character Guide Specific - Light */
-  --character-guide-bubble-bg: rgba(240, 242, 245, 0.85); 
-  --character-guide-bubble-text: #24292e; 
-  --character-guide-bubble-border: rgba(0, 0, 0, 0.1); 
-  --character-guide-help-bg: rgba(9, 105, 218, 0.7); 
+  --character-guide-bubble-bg: rgba(240, 242, 245, 0.85);
+  --character-guide-bubble-text: var(--light-text-primary);
+  --character-guide-bubble-border: rgba(0, 0, 0, 0.1);
+  --character-guide-help-bg: rgba(9, 105, 218, 0.7);
   --character-guide-help-bg-hover: rgba(9, 105, 218, 0.9);
   --character-guide-help-border: rgba(9, 105, 218, 0.9);
-  --character-guide-help-text: white; 
-  --character-guide-dismiss-text: rgba(0, 0, 0, 0.5); 
+  --character-guide-help-text: white;
+  --character-guide-dismiss-text: rgba(0, 0, 0, 0.5);
   --character-guide-dismiss-text-hover: rgba(0, 0, 0, 0.8);
   --character-guide-box-shadow: rgba(0,0,0,0.15);
 
   /* FileExplorer Theme Colors - Light */
-  --file-explorer-bg-start: #A8E6CF;
-  --file-explorer-bg-end: #DCEDC1;
-  --file-explorer-header-start: #3EC1D3;
-  --file-explorer-header-end: #4ECDC4;
-  --file-explorer-accent: #FFD93D;
-  --file-explorer-accent-hover: #FFE66D;
-  --file-explorer-text: #3EC1D3;
-  --file-explorer-border: #FFD93D;
-  --file-explorer-shadow: rgba(62, 193, 211, 0.2);
-  --file-explorer-folder: #FFD93D;
-  --file-explorer-file: #3EC1D3;
-  --file-explorer-python: #4ECDC4;
-  --file-explorer-js: #FFD93D;
-  --file-explorer-html: #A8E6CF;
-  --file-explorer-css: #3EC1D3;
+  --file-explorer-bg-start: var(--light-bg-primary);
+  --file-explorer-bg-end: var(--light-bg-secondary);
+  --file-explorer-header-start: var(--light-accent-primary);
+  --file-explorer-header-end: var(--light-accent-secondary);
+  --file-explorer-accent: var(--light-accent-primary);
+  --file-explorer-accent-hover: var(--light-accent-secondary);
+  --file-explorer-text: var(--light-text-primary);
+  --file-explorer-border: var(--light-border-primary);
+  --file-explorer-shadow: rgba(0, 0, 0, 0.1);
+  --file-explorer-folder: var(--light-accent-primary);
+  --file-explorer-file: var(--light-text-primary);
+  --file-explorer-python: var(--light-success);
+  --file-explorer-js: var(--light-warning);
+  --file-explorer-html: var(--light-accent-primary);
+  --file-explorer-css: var(--light-accent-secondary);
 }
 
 * {
@@ -126,7 +176,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   color: var(--color-text-primary);
-  font-family: var(--font-family-sans);
+  font-family: var(--font-family-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-bg-primary);
@@ -183,4 +233,29 @@ button:focus-visible {
 ::selection {
   background-color: #388bfd; /* Robot blue for selection */
   color: #ffffff;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-primary);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-primary);
+}
+
+/* Selection styles */
+::selection {
+  background: var(--color-accent-primary);
+  color: var(--color-bg-primary);
 }

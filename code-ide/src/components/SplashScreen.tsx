@@ -7,20 +7,25 @@ interface SplashScreenProps {
 
 const SplashScreen: React.FC<SplashScreenProps> = ({ onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [showFeatures, setShowFeatures] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
-    // Check if this is the user's first visit
-    const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
+    // Show splash screen on every refresh for now
+    setIsVisible(true);
     
-    if (!hasVisitedBefore) {
-      // Show splash screen for first-time visitors
-      setIsVisible(true);
-      // Mark that the user has visited
-      localStorage.setItem('hasVisitedBefore', 'true');
-    } else {
-      // Skip splash screen for returning visitors
-      onClose();
-    }
+    // Animate features and button with delay
+    setTimeout(() => setShowFeatures(true), 500);
+    setTimeout(() => setShowButton(true), 1000);
+
+    // Optional: If you want to show it only on first visit, uncomment this:
+    // const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
+    // if (!hasVisitedBefore) {
+    //   setIsVisible(true);
+    //   localStorage.setItem('hasVisitedBefore', 'true');
+    // } else {
+    //   onClose();
+    // }
   }, [onClose]);
 
   if (!isVisible) {
@@ -28,26 +33,29 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onClose }) => {
   }
 
   return (
-    <div className={styles.splashScreen}>
-      <div className={styles.splashContent}>
-        <h1>Welcome to GIDE!</h1>
-        <p>Your friendly coding companion</p>
-        <div className={styles.features}>
-          <div className={styles.feature}>
-            <h3>Learn to Code</h3>
-            <p>Start your coding journey with interactive tutorials and examples</p>
+    <div className={styles.splashContainer}>
+      <div className={`${styles.content} ${isVisible ? styles.visible : ''}`}>
+        <div className={styles.logoContainer}>
+          <div className={styles.logo}>
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </div>
-          <div className={styles.feature}>
-            <h3>Creative Projects</h3>
-            <p>Create animations, music, drawings, and interactive stories</p>
-          </div>
-          <div className={styles.feature}>
-            <h3>Smart Assistant</h3>
-            <p>Get help and hints when you need them</p>
-          </div>
+          <h1 className={styles.title}>Welcome to SKoolCode!</h1>
+          <p className={styles.subtitle}>Your friendly coding companion</p>
         </div>
+        
+        <div className={styles.loadingContainer}>
+          <div className={styles.progressBar}>
+            <div className={styles.progressFill} style={{ width: '100%' }}></div>
+          </div>
+          <p className={styles.loadingText}>Loading your coding environment...</p>
+        </div>
+
         <button 
-          className={styles.startButton}
+          className={`${styles.startButton} ${showButton ? styles.buttonVisible : ''}`}
           onClick={() => {
             setIsVisible(false);
             onClose();

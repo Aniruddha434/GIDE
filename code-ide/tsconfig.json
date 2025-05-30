@@ -15,8 +15,19 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitOverride": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noUncheckedIndexedAccess": true,
     "typeRoots": ["./node_modules/@types"],
-    "types": ["react", "react-dom", "three", "node"]
+    "types": ["node", "react", "react-dom", "three"]
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

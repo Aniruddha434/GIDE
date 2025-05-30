@@ -1,0 +1,150 @@
+.editorContainer {
+  display: flex;
+  flex-direction: column;
+  background: var(--editor-bg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  height: 100%;
+  position: relative;
+}
+
+.editor {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  border-radius: 0;
+}
+
+.editorHeader {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+.languageBadge {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid var(--color-border-primary);
+}
+
+/* Custom scrollbar styles */
+.editorContainer :global(.monaco-editor) {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-primary) var(--editor-bg);
+}
+
+/* Scrollbar styles */
+.editor :global(.monaco-editor .overflow-guard) {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-primary) transparent;
+}
+
+.editor :global(.monaco-editor .overflow-guard::-webkit-scrollbar) {
+  width: 8px;
+  height: 8px;
+}
+
+.editor :global(.monaco-editor .overflow-guard::-webkit-scrollbar-track) {
+  background: transparent;
+}
+
+.editor :global(.monaco-editor .overflow-guard::-webkit-scrollbar-thumb) {
+  background-color: var(--color-border-primary);
+  border-radius: 4px;
+}
+
+.editor :global(.monaco-editor .overflow-guard::-webkit-scrollbar-thumb:hover) {
+  background-color: var(--color-text-secondary);
+}
+
+/* Minimap styles */
+.editor :global(.monaco-editor .minimap) {
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.editor :global(.monaco-editor .minimap:hover) {
+  opacity: 1;
+}
+
+/* Selection styles */
+.editor :global(.monaco-editor .selected-text) {
+  background-color: var(--color-accent-primary);
+}
+
+/* Cursor styles */
+.editor :global(.monaco-editor .cursor) {
+  background-color: var(--color-text-primary);
+  width: 2px !important;
+}
+
+/* Widget styles */
+.editor :global(.monaco-editor .suggest-widget),
+.editor :global(.monaco-editor .hover-widget) {
+  background: var(--color-bg-secondary) !important;
+  border: 1px solid var(--color-border-primary) !important;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+}
+
+.editor :global(.monaco-editor .suggest-widget .monaco-list .monaco-list-row) {
+  padding: 4px 8px;
+}
+
+.editor :global(.monaco-editor .suggest-widget .monaco-list .monaco-list-row.selected) {
+  background-color: var(--color-accent-primary) !important;
+}
+
+/* Line highlight */
+.editor :global(.monaco-editor .current-line) {
+  background-color: var(--color-bg-secondary) !important;
+  border: none !important;
+}
+
+/* Line numbers */
+.editor :global(.monaco-editor .margin) {
+  background-color: var(--editor-bg) !important;
+}
+
+.editor :global(.monaco-editor .margin-view-overlays .cgmr) {
+  color: var(--color-text-secondary) !important;
+}
+
+/* Find widget */
+.editor :global(.monaco-editor .find-widget) {
+  background: var(--color-bg-secondary) !important;
+  border: 1px solid var(--color-border-primary) !important;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+}
+
+.editor :global(.monaco-editor .find-widget input) {
+  background: var(--color-bg-primary) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-border-primary) !important;
+  border-radius: var(--radius-sm);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .editorContainer {
+    border-radius: 0;
+  }
+} 

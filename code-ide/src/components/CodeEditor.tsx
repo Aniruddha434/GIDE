@@ -19,6 +19,7 @@ const CodeEditor = ({ code, language, theme, onChange, readOnly = false }: CodeE
   const [fontSize, setFontSize] = useState(14);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentFileHandle, setCurrentFileHandle] = useState<FileSystemFileHandle | null>(null);
+  const [showMinimap, setShowMinimap] = useState(true);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -27,7 +28,7 @@ const CodeEditor = ({ code, language, theme, onChange, readOnly = false }: CodeE
         language,
         theme,
         automaticLayout: true,
-        minimap: { enabled: true },
+        minimap: { enabled: showMinimap },
         lineNumbers: showLineNumbers ? 'on' : 'off',
         wordWrap: wordWrap,
         fontSize: fontSize,
@@ -49,6 +50,7 @@ const CodeEditor = ({ code, language, theme, onChange, readOnly = false }: CodeE
         editorRef.current?.dispose();
       };
     }
+    return undefined;
   }, [language, theme]);
 
   useEffect(() => {
@@ -57,9 +59,10 @@ const CodeEditor = ({ code, language, theme, onChange, readOnly = false }: CodeE
         lineNumbers: showLineNumbers ? 'on' : 'off',
         wordWrap: wordWrap,
         fontSize: fontSize,
+        minimap: { enabled: showMinimap },
       });
     }
-  }, [showLineNumbers, wordWrap, fontSize]);
+  }, [showLineNumbers, wordWrap, fontSize, showMinimap]);
 
   const handleCopyCode = () => {
     navigator.clipboard.writeText(code);
@@ -145,6 +148,15 @@ const CodeEditor = ({ code, language, theme, onChange, readOnly = false }: CodeE
     }
   };
 
+  const handleToggleMinimap = () => {
+    setShowMinimap((prev) => !prev);
+  };
+
+  const handleNewFile = () => {
+    // Placeholder: You can implement file creation logic here or pass a prop
+    alert('New file functionality coming soon!');
+  };
+
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
@@ -171,6 +183,9 @@ const CodeEditor = ({ code, language, theme, onChange, readOnly = false }: CodeE
         onToggleFullscreen={handleToggleFullscreen}
         onSearch={handleSearch}
         onSaveFile={handleSaveFile}
+        onToggleMinimap={handleToggleMinimap}
+        onNewFile={handleNewFile}
+        showMinimap={showMinimap}
       />
       <div ref={containerRef} className={styles.editor} />
     </div>

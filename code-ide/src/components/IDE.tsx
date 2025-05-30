@@ -12,9 +12,7 @@ import LanguageSelector from './LanguageSelector';
 import FileExplorer from './FileExplorer';
 import TabsBar from './TabsBar';
 import type { FileSystemNode } from './FileExplorer';
-import type { RobotMood, Theme } from '../App';
 import useWebSocket, { type WebSocketMessage } from '../hooks/useWebSocket';
-import { ThemeToggle } from './ThemeToggle';
 import CreateFileModal from './CreateFileModal';
 import CharacterGuide from './CharacterGuide';
 import Logo from './Logo';
@@ -34,9 +32,6 @@ interface IDEProps {
   onToggleTheme: (theme: 'light' | 'dark') => void;
   onAskAiHint: () => void;
 }
-
-// Add onAskAiHint to the component props
-type IDEPropsWithAsk = IDEProps & { onAskAiHint: () => void };
 
 const initialFileTree: FileSystemNode[] = [
   {

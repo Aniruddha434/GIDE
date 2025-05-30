@@ -7,7 +7,6 @@ interface SplashScreenProps {
 
 const SplashScreen: React.FC<SplashScreenProps> = ({ onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [showFeatures, setShowFeatures] = useState(false);
   const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
@@ -15,7 +14,6 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onClose }) => {
     setIsVisible(true);
     
     // Animate features and button with delay
-    setTimeout(() => setShowFeatures(true), 500);
     setTimeout(() => setShowButton(true), 1000);
 
     // Optional: If you want to show it only on first visit, uncomment this:

@@ -20,7 +20,6 @@ const App: React.FC = () => {
   const [showGuideModal, setShowGuideModal] = useState<boolean>(false);
   const [theme, setTheme] = useState<Theme>('dark');
   const [appContainerClasses, setAppContainerClasses] = useState<string>('app-container');
-  const [showSplash, setShowSplash] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   // Effect for entry animation
@@ -80,10 +79,6 @@ const App: React.FC = () => {
 
   const toggleGuideModal = () => {
     setShowGuideModal(!showGuideModal);
-  };
-
-  const handleSplashComplete = () => {
-    setShowSplash(false);
   };
 
   useEffect(() => {

@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './AchievementPanel.module.css';
-import { Achievement } from './Achievement';
 import { ACHIEVEMENTS } from '../utils/AchievementManager';
 import AchievementManager from '../utils/AchievementManager';
 

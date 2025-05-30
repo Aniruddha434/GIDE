@@ -2,7 +2,6 @@ import React from 'react';
 import { 
   List, 
   WrapText, 
-  Type, 
   Copy, 
   Code, 
   Maximize2, 

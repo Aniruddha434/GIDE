@@ -619,16 +619,6 @@ Write your markdown content here.`;
     setCurrentAchievement(null);
   };
 
-  const handleSaveFile = async () => {
-    // ... existing code ...
-    try {
-      // ... existing code ...
-      achievementManager.unlockAchievement('file_saver');
-    } catch (error) {
-      // ... existing error handling ...
-    }
-  };
-
   const handleThemeToggle = () => {
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
     onToggleTheme(newTheme);
@@ -767,7 +757,7 @@ Write your markdown content here.`;
                           : f
                       ));
                     }
-                  }} 
+                  }}
                 />
               </div>
             </Panel>
